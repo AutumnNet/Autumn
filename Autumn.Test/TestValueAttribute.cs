@@ -55,5 +55,22 @@ namespace Autumn.Test
             Assert.AreEqual(tc.stringField, "25");
 
         }
+        
+        [Test]
+        public void TestValueProperties()
+        {
+            var tc = new TestClass();
+            var fields = new List<ValueScanner.ValueProperty>(ValueScanner.ScanProperty(tc));
+            Assert.NotNull(fields);
+            Assert.AreEqual(fields.Count, 2);
+            fields.ForEach(f => f.SetValue(null));
+            Assert.AreEqual(tc.IntProperty, 12);
+            Assert.AreEqual(tc.StringProperty, "12");
+            
+            fields.ForEach(f => f.SetValue(29));
+            Assert.AreEqual(tc.IntProperty, 29);
+            Assert.AreEqual(tc.StringProperty, "29");
+
+        }
     }
 }

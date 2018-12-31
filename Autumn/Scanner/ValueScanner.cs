@@ -25,7 +25,8 @@ namespace Autumn.Scanner
             
             public void SetValue(ApplicationContext ctx)
             {
-                SetValue(ctx.ApplicationParameter.GetOrNull(Value.Target));
+                
+                SetValue(ctx?.ApplicationParameter.GetOrNull(Value.Target));
             }
 
         }
@@ -43,7 +44,7 @@ namespace Autumn.Scanner
 
             public void SetValue(ApplicationContext ctx)
             {
-                SetValue(ctx.ApplicationParameter.GetOrNull(Value.Target));
+                SetValue(ctx?.ApplicationParameter.GetOrNull(Value.Target));
             }
         }
         
