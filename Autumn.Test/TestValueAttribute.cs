@@ -15,6 +15,12 @@ namespace Autumn.Test
             
             [Value("{alpha1.betta2.charlie:10}")]
             public string stringField;
+            
+            [Value("{alpha3.betta1.charlie:12}")]
+            public int IntProperty { get; set; }
+            
+            [Value("{alpha3.betta1.charlie:12}")]
+            public string StringProperty { get; set; }
         }
         
 
@@ -22,7 +28,7 @@ namespace Autumn.Test
         public void TestValueRegexp()
         {
             var tc = new TestClass();
-            var fields = new List<ValueScanner.ValueField>(ValueScanner.Scan(tc));
+            var fields = new List<ValueScanner.ValueField>(ValueScanner.ScanField(tc));
             Assert.NotNull(fields);
             Assert.AreEqual(fields.Count, 2);
             var v = fields[0];
@@ -37,7 +43,7 @@ namespace Autumn.Test
         public void TestValueField()
         {
             var tc = new TestClass();
-            var fields = new List<ValueScanner.ValueField>(ValueScanner.Scan(tc));
+            var fields = new List<ValueScanner.ValueField>(ValueScanner.ScanField(tc));
             Assert.NotNull(fields);
             Assert.AreEqual(fields.Count, 2);
             fields.ForEach(f => f.SetValue(null));
