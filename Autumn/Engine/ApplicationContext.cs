@@ -86,8 +86,13 @@ namespace Autumn.Engine
         {
             if (!componentType.Singleton || !ComponentInstance.ContainsKey(componentType))
             {
-                ComponentInstance.Add(componentType, componentType.Constructor
-                    .Invoke(componentType.Constructor.GetAutumnConstructorArguments(this)));
+                var arguments = componentType.Constructor.GetAutumnConstructorArguments(this);
+                
+                //May create in recursive for Arguments
+                if (componentType.Singleton && ComponentInstance.ContainsKey(componentType)) 
+                    return ComponentInstance[componentType];
+                
+                ComponentInstance.Add(componentType, componentType.Constructor.Invoke(arguments));
                 if (autowired)
                 {
                     Autowireding(ComponentInstance[componentType]);

@@ -18,10 +18,14 @@ namespace Autumn.Test
             var assembly = Assembly.GetExecutingAssembly();
             Assert.NotNull(assembly);
             var context = new ApplicationContext(assembly);
-            var service = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
-            Assert.NotNull(service);
+            var serviceA = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
+            Assert.NotNull(serviceA);
             Assert.NotNull(context.GetInstance(typeof(TestServiceB)));
-            Assert.NotNull(service.serviceB);
+            Assert.NotNull(serviceA.serviceB);
+            Assert.NotNull(serviceA.serviceB.service);
+            Assert.AreEqual(serviceA, serviceA.serviceB.service);
+            Assert.AreEqual(context.GetInstance(typeof(TestServiceB)), serviceA.serviceB);
+            Assert.AreEqual(context.GetInstance(typeof(TestServiceA)), serviceA);
         }
     }
 
@@ -29,11 +33,14 @@ namespace Autumn.Test
     [Service]
     public class TestServiceA
     {
-        [Autowired] public TestServiceB serviceB;
+        public TestServiceB serviceB;
 
-        public TestServiceA()
+        [Autowired]
+        public TestServiceA(TestServiceB service)
         {
-            Console.WriteLine("ACreate");
+            this.serviceB = service;
+            Console.WriteLine($"A-Create with service {service}");
+            
         }
     }
     
@@ -41,13 +48,13 @@ namespace Autumn.Test
     [Service]
     public class TestServiceB
     {
+        [Autowired]
         public TestServiceA service;
         
-        [Autowired]
-        public TestServiceB(TestServiceA service)
+        
+        public TestServiceB()
         {
-            Console.WriteLine($"BCreate with service {service}");
-            this.service = service;
+            Console.WriteLine($"B-Create with service [{service}]");
         }
         
         
