@@ -44,11 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConfigTest.cs" />
+    <Compile Include="ApplicationTest.cs" />
     <Compile Include="BasicTest.cs" />
-    <Compile Include="TestComponentStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDictionaryHelper.cs" />
-    <Compile Include="TestValueAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Autumn\Autumn.csproj">

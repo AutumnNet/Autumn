@@ -47,19 +47,28 @@ namespace Autumn.Engine
 
         private void Autowireding(object o)
         {
+            
+            Console.WriteLine($"Autowireding {o.GetType().FullName}");
+            o
+                .GetType()
+                .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
+                .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
+                .ToList().ForEach(item => Console.WriteLine($" `--> {item.Name}"));
+
+            
             o
                 .GetType()
                 .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => GetInstance(item.FieldType));
+                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType)));
             
             o
                 .GetType()
                 .GetProperties(BindingFlags.SetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => GetInstance(item.PropertyType));
+                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType)));
         }
 
         private void PostConstruction(object o)
@@ -75,15 +84,18 @@ namespace Autumn.Engine
         private object GetInstance(ComponentType componentType) => GetInstance(componentType, true); 
         private object GetInstance(ComponentType componentType, bool autowired)
         {
-            if (!componentType.Singleton || !ComponentInstance.ContainsKey(componentType))   
+            if (!componentType.Singleton || !ComponentInstance.ContainsKey(componentType))
+            {
                 ComponentInstance.Add(componentType, componentType.Constructor
                     .Invoke(componentType.Constructor.GetAutumnConstructorArguments(this)));
-            if (autowired)
-            {
-                Autowireding(ComponentInstance[componentType]);
-                PostConstruction(ComponentInstance[componentType]);
-            }else
-                WaitAutowiredInstances.Add(ComponentInstance[componentType]);
+                if (autowired)
+                {
+                    Autowireding(ComponentInstance[componentType]);
+                    PostConstruction(ComponentInstance[componentType]);
+                }
+                else
+                    WaitAutowiredInstances.Add(ComponentInstance[componentType]);
+            }
             return ComponentInstance[componentType];            
         }
         
@@ -159,11 +171,15 @@ namespace Autumn.Engine
                 if (componentType.Singleton && !componentType.Lazy)
                     GetInstance(componentType, false); // Create other Components
 
-            foreach(var instance in WaitAutowiredInstances)
+            Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
+            foreach (var instance in WaitAutowiredInstances)
                 Autowireding(instance);
+            Console.WriteLine($"Autowired Done");
             
+            Console.WriteLine($"PostConstruction queue size:{WaitAutowiredInstances.Count}");
             foreach(var instance in WaitAutowiredInstances)
                 PostConstruction(instance);
+            Console.WriteLine($"PostConstruction Done");
             
             WaitAutowiredInstances.Clear();
         }

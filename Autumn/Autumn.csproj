@@ -55,11 +55,6 @@
     <Compile Include="Exceptions\AutumnException.cs" />
     <Compile Include="Object\ComponentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scanner\ComponentContainer.cs" />
-    <Compile Include="Scanner\ComponentScanner.cs" />
-    <Compile Include="Scanner\ComponentStorage.cs" />
-    <Compile Include="Scanner\IScanner.cs" />
-    <Compile Include="Scanner\ValueScanner.cs" />
     <Compile Include="Tools\AssemblyHelper.cs" />
     <Compile Include="Tools\ConvertHelper.cs" />
     <Compile Include="Tools\DictionaryHelper.cs" />
