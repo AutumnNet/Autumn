@@ -91,11 +91,40 @@ namespace Autumn.Tools
         /// Default Assembly
         /// </summary>
         /// <returns></returns>
-        public static Assembly GetDefaultAssembly()
+        public static IEnumerable<Assembly> GetAssembly()
         {
-            return Assembly.GetEntryAssembly();
+            return new HashSet<Assembly>{Assembly.GetExecutingAssembly()}; 
         }
 
+        public static IEnumerable<Assembly> GetAssemblies(params string[] namespaces)
+        {
+            var assemblies = new HashSet<Assembly>();
+            var ns = new HashSet<string>(namespaces);
+
+            var names = new List<AssemblyName>
+            {
+                Assembly.GetCallingAssembly().GetName(), 
+                Assembly.GetExecutingAssembly().GetName()
+            };
+            names.AddRange(Assembly.GetCallingAssembly().GetReferencedAssemblies());
+            names.AddRange(Assembly.GetExecutingAssembly().GetReferencedAssemblies());
+            
+            foreach (var assemblyName in names)
+            {
+                //Console.WriteLine($"Assembly:{assemblyName.Name} [{assemblyName.FullName}]");
+                var assembly = Assembly.Load(assemblyName);
+                foreach (var type in assembly.GetTypes()) {
+                    if (ns.Contains(type.Namespace))
+                    {
+                        assemblies.Add(assembly);
+                        break;
+                    }
+                }
+            }
+            return assemblies;
+        }
+
+        
         public static object[] GetAutumnConstructorArguments(this ConstructorInfo info, ApplicationContext ctx)
         {
             if (info == null)

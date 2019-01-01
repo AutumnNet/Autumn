@@ -135,12 +135,12 @@ namespace Autumn.Engine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplicationContext() : this(AssemblyHelper.GetDefaultAssembly()){}
+        public ApplicationContext() : this(AssemblyHelper.GetAssembly()){}
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="assembly">Assembly</param>
-        public ApplicationContext(Assembly assembly)
+        public ApplicationContext(IEnumerable<Assembly> assemblies)
         {
             // Create Component Types
             ComponentTypes = new Dictionary<Type, HashSet<ComponentType>>();
@@ -148,15 +148,17 @@ namespace Autumn.Engine
             WaitAutowiredInstances = new HashSet<object>();
             var configurations = new HashSet<ComponentType>();
             var components = new HashSet<ComponentType>();
-            foreach (var componentType in assembly.GetAutumnComponents(true))
-            {
-                var item = new ComponentType(componentType);
-                AddComponentType(item);
-                if (componentType.IsAutumnConfiguration())
-                    configurations.Add(item);
-                else
-                    components.Add(item);
-            }
+            
+            foreach(var assembly in assemblies)
+                foreach (var componentType in assembly.GetAutumnComponents(true))
+                {
+                    var item = new ComponentType(componentType);
+                    AddComponentType(item);
+                    if (componentType.IsAutumnConfiguration())
+                        configurations.Add(item);
+                    else
+                        components.Add(item);
+                }
 
             // Instantiate Configurations
             foreach (var configurationType in configurations)

@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using Autumn.Annotation;
 using Autumn.Engine;
+using Autumn.Tools;
 using NUnit.Framework;
 
 namespace Autumn.Test
@@ -15,9 +16,9 @@ namespace Autumn.Test
         [Test]
         public void FirstTest()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            Assert.NotNull(assembly);
-            var context = new ApplicationContext(assembly);
+            var assemblys = AssemblyHelper.GetAssemblies("Autumn", "Autumn.Test");
+            Assert.NotNull(assemblys);
+            var context = new ApplicationContext(assemblys);
             var serviceA = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
             Assert.NotNull(serviceA);
             Assert.NotNull(context.GetInstance(typeof(TestServiceB)));
@@ -50,7 +51,8 @@ namespace Autumn.Test
     {
         [Autowired]
         public TestServiceA service;
-        
+
+        [Autowired] private Demo demo;
         
         public TestServiceB()
         {

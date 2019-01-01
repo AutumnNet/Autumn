@@ -47,7 +47,7 @@
     <Compile Include="Annotation\ValueAttribute.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Annotation\Base\Component.cs" />
-    <Compile Include="Engine\ApplicationComponentStorage.cs" />
+    <Compile Include="Demo.cs" />
     <Compile Include="Engine\ApplicationParameter.cs" />
     <Compile Include="Engine\ApplicationContext.cs" />
     <Compile Include="Exceptions\AutumnComponentMultiplyException.cs" />
