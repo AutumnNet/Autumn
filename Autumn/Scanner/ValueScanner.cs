@@ -14,7 +14,7 @@ namespace Autumn.Scanner
     {
         public class ValueField
         {
-            public Value Value { get; set; }
+            public ValueAttribute Value { get; set; }
             public object Target { get; set; }
             public FieldInfo Field { get; set; }
             
@@ -33,7 +33,7 @@ namespace Autumn.Scanner
         
         public class ValueProperty
         {
-            public Value Value { get; set; }
+            public ValueAttribute Value { get; set; }
             public object Target { get; set; }
             public PropertyInfo Property { get; set; }
             
@@ -52,7 +52,7 @@ namespace Autumn.Scanner
         {
             public class ValueMethodParameter
             {
-                public Value Value { get; set; }
+                public ValueAttribute Value { get; set; }
                 public ParameterInfo Parameter { get; set; }
                 public object GetValue(ApplicationContext ctx)
                 {
@@ -76,6 +76,14 @@ namespace Autumn.Scanner
                 return ValueMethodParameters.Select(item => item.GetValue(ctx)).ToArray();
             }
 
+            public override int GetHashCode()
+            {
+                return new HashCodeBuilder()
+                    .Add(Target)
+                    .Add(Method)
+                    .GetHashCode();
+            }
+
             public object Invoke(ApplicationContext ctx)
             {
                 return Method.Invoke(Target, GetValues(ctx));
@@ -90,8 +98,8 @@ namespace Autumn.Scanner
                 {
                     valueMethodParameters[i] = new ValueMethodParameter();
                     var pi = Method.GetParameters()[i];
-                    if (pi.GetCustomAttributes(typeof(Value), false).Length > 0)
-                        valueMethodParameters[i].Value = pi.GetCustomAttribute<Value>();
+                    if (pi.GetCustomAttributes(typeof(ValueAttribute), false).Length > 0)
+                        valueMethodParameters[i].Value = pi.GetCustomAttribute<ValueAttribute>();
                     valueMethodParameters[i].Parameter = pi;
                 }
                 ValueMethodParameters = valueMethodParameters;
@@ -122,8 +130,8 @@ namespace Autumn.Scanner
                 {
                     valueMethodParameters[i] = new ValueMethod.ValueMethodParameter();
                     var pi = Constructor.GetParameters()[i];
-                    if (pi.GetCustomAttributes(typeof(Value), false).Length > 0)
-                        valueMethodParameters[i].Value = pi.GetCustomAttribute<Value>();
+                    if (pi.GetCustomAttributes(typeof(ValueAttribute), false).Length > 0)
+                        valueMethodParameters[i].Value = pi.GetCustomAttribute<ValueAttribute>();
                     valueMethodParameters[i].Parameter = pi;
                 }
                 ValueMethodParameters = valueMethodParameters;
@@ -134,16 +142,16 @@ namespace Autumn.Scanner
         {
             return o.GetType()
                 .GetFields()
-                .Where(value => value.GetCustomAttributes(typeof(Value), false).Length > 0)
-                .Select(value => new ValueField {Value = value.GetCustomAttribute<Value>(), Field = value, Target = o});
+                .Where(value => value.GetCustomAttributes(typeof(ValueAttribute), false).Length > 0)
+                .Select(value => new ValueField {Value = value.GetCustomAttribute<ValueAttribute>(), Field = value, Target = o});
         }
         
         public static IEnumerable<ValueProperty> ScanProperty(object o)
         {
             return o.GetType()
                 .GetProperties()
-                .Where(value => value.GetCustomAttributes(typeof(Value), false).Length > 0)
-                .Select(value => new ValueProperty {Value = value.GetCustomAttribute<Value>(), Property = value, Target = o});
+                .Where(value => value.GetCustomAttributes(typeof(ValueAttribute), false).Length > 0)
+                .Select(value => new ValueProperty {Value = value.GetCustomAttribute<ValueAttribute>(), Property = value, Target = o});
         }
 
         public static ValueMethod ScanMethod(object o, MethodInfo mi)

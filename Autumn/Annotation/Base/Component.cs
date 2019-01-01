@@ -6,8 +6,9 @@ namespace Autumn.Annotation.Base
     /// Base Anotation
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public abstract class Component : Attribute
+    public abstract class ComponentAttribute : Attribute
     {
-        
+        public bool Singleton { get; set; }
+        public bool Lazy { get; set; }
     }
 }

@@ -7,14 +7,14 @@ namespace Autumn.Annotation
     /// Value Attribute
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter)]
-    public class Value :  Attribute
+    public class ValueAttribute :  Attribute
     {
         public string Target { get; }
         public string Default { get; }
         
         private static readonly Regex Pattern = new Regex(@"^\{(?<key>[a-zA-Z0-9\.]*)(|:(?<value>.*))}$", RegexOptions.Compiled);
         
-        public Value(string target)
+        public ValueAttribute(string target)
         {
             var match = Pattern.Match(target);
             if (!match.Success)

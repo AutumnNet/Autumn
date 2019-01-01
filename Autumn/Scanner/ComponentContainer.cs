@@ -25,7 +25,7 @@ namespace Autumn.Scanner
             ConstructorParameterInfo = new ParameterInfo[0];
             foreach (var constructor in ComponentType.GetConstructors())
             {
-                if (constructor.GetCustomAttributes(typeof(Autowired), false).Length > 0)
+                if (constructor.GetCustomAttributes(typeof(AutowiredAttribute), false).Length > 0)
                 {
                     Constructor = constructor;
                     ConstructorParameterInfo = constructor.GetParameters();

@@ -38,24 +38,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Annotation\Autowired.cs" />
-    <Compile Include="Annotation\Bean.cs" />
-    <Compile Include="Annotation\Configuration.cs" />
-    <Compile Include="Annotation\Repository.cs" />
-    <Compile Include="Annotation\Service.cs" />
-    <Compile Include="Annotation\Value.cs" />
+    <Compile Include="Annotation\AutowiredAttribute.cs" />
+    <Compile Include="Annotation\BeanAttribute.cs" />
+    <Compile Include="Annotation\ConfigurationAttribute.cs" />
+    <Compile Include="Annotation\PostConstruct.cs" />
+    <Compile Include="Annotation\RepositoryAttribute.cs" />
+    <Compile Include="Annotation\ServiceAttribute.cs" />
+    <Compile Include="Annotation\ValueAttribute.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Annotation\Base\Component.cs" />
+    <Compile Include="Engine\ApplicationComponentStorage.cs" />
     <Compile Include="Engine\ApplicationParameter.cs" />
     <Compile Include="Engine\ApplicationContext.cs" />
+    <Compile Include="Exceptions\AutumnComponentMultiplyException.cs" />
+    <Compile Include="Exceptions\AutumnComponentNotFoundException.cs" />
+    <Compile Include="Exceptions\AutumnException.cs" />
+    <Compile Include="Object\ComponentType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scanner\ComponentContainer.cs" />
     <Compile Include="Scanner\ComponentScanner.cs" />
     <Compile Include="Scanner\ComponentStorage.cs" />
     <Compile Include="Scanner\IScanner.cs" />
     <Compile Include="Scanner\ValueScanner.cs" />
+    <Compile Include="Tools\AssemblyHelper.cs" />
     <Compile Include="Tools\ConvertHelper.cs" />
     <Compile Include="Tools\DictionaryHelper.cs" />
+    <Compile Include="Tools\HashCodeBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

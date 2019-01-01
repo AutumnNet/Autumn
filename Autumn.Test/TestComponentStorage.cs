@@ -12,7 +12,7 @@ namespace Autumn.Test
         /// <summary>
         /// Component Without Constructor
         /// </summary>
-        [Service]
+        [Service(Singleton = true)]
         public class TestComponentA 
         {
         }
