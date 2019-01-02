@@ -38,21 +38,20 @@ namespace Autumn.Engine
                 .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList().ForEach(item => Console.WriteLine($" `--> {item.Name}"));
-
             
             o
                 .GetType()
                 .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType)));
+                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType, item.GetCustomAttribute<QualifierAttribute>())));
             
             o
                 .GetType()
                 .GetProperties(BindingFlags.SetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType)));
+                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, item.GetCustomAttribute<QualifierAttribute>())));
         }
 
         private void PostConstruction(object o)
@@ -72,15 +71,33 @@ namespace Autumn.Engine
         /// <returns>Single Instance</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
         /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
-        public object GetInstance(Type type)
+//        public object GetInstance(Type type)
+//        {
+//            if (!ComponentTypes.ContainsKey(type))
+//                throw new AutumnComponentNotFoundException(type);
+//            var componentTypes = ComponentTypes[type];
+//            if (componentTypes.Count > 1)
+//                throw new AutumnComponentMultiplyException(type, componentTypes);
+//            return GetInstance(componentTypes.First());
+//        }
+
+        public object GetInstance(Type type, IAutowiredName attribute = null)
         {
             if (!ComponentTypes.ContainsKey(type))
                 throw new AutumnComponentNotFoundException(type);
             var componentTypes = ComponentTypes[type];
-            if (componentTypes.Count > 1)
-                throw new AutumnComponentMultiplyException(type, componentTypes);
-            return GetInstance(componentTypes.First());
+            
+            if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
+                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => item.Name == attribute.Name));
+            
+            if (componentTypes.Count == 1) return GetInstance(componentTypes.First());
+            if (componentTypes.Count(item => item.IsPrimary) == 1)
+                return GetInstance(componentTypes.First(item => item.IsPrimary));
+            if (componentTypes.Count(item => item.IsPrimary) > 1)
+                throw new AutumnComponentMultiplyPrimaryException(type, componentTypes);
+            throw new AutumnComponentMultiplyException(type, componentTypes);
         }
+
         
         private object GetInstance(ComponentType componentType) => GetInstance(componentType, true); 
         private object GetInstance(ComponentType componentType, bool autowired)

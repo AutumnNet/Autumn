@@ -36,12 +36,22 @@ namespace Autumn.Test
     [EnableAssembly(Values = new[]{"Autumn"})]
     public class ServiceConfiguration
     {
-        [Bean]
-        public XmlDocument getNode()
+        [Bean(Name = "NodeA")]
+        [Primary]
+        public XmlDocument getNodeA()
         {
-            Console.WriteLine("Create Bean");
+            Console.WriteLine("Create BeanA");
             return new XmlDocument();
         }
+        
+        
+        [Bean(Name = "NodeB")]
+        public XmlDocument getNodeB()
+        {
+            Console.WriteLine("Create BeanB");
+            return new XmlDocument();
+        }
+
     }
 
     [Service]
@@ -66,6 +76,7 @@ namespace Autumn.Test
         public TestServiceA service;
 
         [Autowired]
+        //[Qualifier(Name = "NodeA")]
         public XmlDocument node;
 
         [Autowired] private Demo demo;
@@ -74,8 +85,6 @@ namespace Autumn.Test
         {
             Console.WriteLine($"B-Create with service [{service}]");
         }
-        
-        
         
     }
 

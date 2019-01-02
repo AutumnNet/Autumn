@@ -24,6 +24,8 @@ namespace Autumn.Object
         public IEnumerable<Type> InheritanceTypes { get; }
         
         public bool IsBean { get; }
+        
+        public bool IsPrimary { get; }
 
         public bool Singleton { get; } 
         
@@ -39,7 +41,6 @@ namespace Autumn.Object
             Singleton = attr.Singleton;
             IsBean = attr.Lazy;
             Name = attr.Name;
-            
         }
 
         public ComponentType(MethodInfo beanMethod, Type target)
@@ -50,6 +51,7 @@ namespace Autumn.Object
             BeanTargetType = target;
             var attr = beanMethod.GetCustomAttribute<BeanAttribute>();
             Singleton = attr.Singleton;
+            IsPrimary = beanMethod.GetCustomAttribute<PrimaryAttribute>() != null;
             IsBean = true;
             Name = attr.Name;
             

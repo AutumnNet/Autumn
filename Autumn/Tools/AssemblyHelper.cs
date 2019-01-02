@@ -129,7 +129,7 @@ namespace Autumn.Tools
                     );
                 }
                 else //Autowired
-                    arguments[i] = ctx.GetInstance(pi.ParameterType);
+                    arguments[i] = ctx.GetInstance(pi.ParameterType, pi.GetCustomAttribute<QualifierAttribute>());
             }
             return arguments;
         }
