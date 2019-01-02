@@ -24,11 +24,13 @@ namespace Autumn.Object
             
             if (Type.IsGenericType && Type.GetGenericTypeDefinition() == typeof(HashSet<>))
                 return GetHashSet(elements);
+            
             if (Type.IsGenericType && Type.GetGenericTypeDefinition() == typeof(SortedSet<>))
                 return GetSortedSet(elements);
 
-            
-            Console.WriteLine("MultiplierElement is Null Type:{0} ElementType:{1}", Type, ElementType);
+            if (Type.IsGenericType && Type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return GetList(elements);
+
             return null;
         }
 
@@ -46,6 +48,7 @@ namespace Autumn.Object
                 .GetConstructor(new[] {typeof (IEnumerable<>).MakeGenericType(ElementType)});
             return ctor.Invoke(new[] { GetArray(array.ToArray()) }) as IEnumerable;
         }
+        
 
         
         private IEnumerable GetHashSet(IEnumerable<object> array)

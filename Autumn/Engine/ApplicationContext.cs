@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autumn.Annotation;
 using Autumn.Exceptions;
+using Autumn.Interfaces;
 using Autumn.Object;
 using Autumn.Tools;
 
@@ -22,7 +23,7 @@ namespace Autumn.Engine
 
         private HashSet<object> WaitAutowiredInstances { get; } 
 
-       
+        private List<IAutumnComponentInitializationProcessor> ComponentProcessor { get; } 
 
         private void Invoke(MethodInfo mi, object target)
         {

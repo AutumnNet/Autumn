@@ -77,7 +77,7 @@ namespace Autumn.Test
         [Autowired]
         public HashSet<XmlDocument> documentsSet;
 
-        //[Autowired]
+        [Autowired]
         public IEnumerable<XmlDocument> documentsIe;
         
         

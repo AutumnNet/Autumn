@@ -163,7 +163,9 @@ namespace Autumn.Tools
 
         public static bool IsIEnumerable(this Type type)
         {
-            if (type == typeof(IEnumerable<>)) return true;
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return true;
+            
             return type.GetInterfaces().Any(
                 i => i.IsGenericType &&
                      i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
