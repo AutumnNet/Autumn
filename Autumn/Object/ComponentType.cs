@@ -33,7 +33,6 @@ namespace Autumn.Object
         
         public ComponentType(Type type)
         {
-            
             Type = type;
             InheritanceTypes = Type.GetInheritanceTypes();
             Constructor = Type.GetAutumnConstructor();

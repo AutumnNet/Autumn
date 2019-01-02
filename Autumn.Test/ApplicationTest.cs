@@ -76,7 +76,7 @@ namespace Autumn.Test
         public TestServiceA service;
 
         [Autowired]
-        //[Qualifier(Name = "NodeA")]
+        [Qualifier(Names = new []{"NodeA", "NodeC"})]
         public XmlDocument node;
 
         [Autowired] private Demo demo;

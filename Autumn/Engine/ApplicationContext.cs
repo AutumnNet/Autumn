@@ -68,27 +68,18 @@ namespace Autumn.Engine
         /// Get one Instance of Type
         /// </summary>
         /// <param name="type">Type</param>
+        /// <param name="attribute">Qualifier attribute</param>
         /// <returns>Single Instance</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
         /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
-//        public object GetInstance(Type type)
-//        {
-//            if (!ComponentTypes.ContainsKey(type))
-//                throw new AutumnComponentNotFoundException(type);
-//            var componentTypes = ComponentTypes[type];
-//            if (componentTypes.Count > 1)
-//                throw new AutumnComponentMultiplyException(type, componentTypes);
-//            return GetInstance(componentTypes.First());
-//        }
-
         public object GetInstance(Type type, IAutowiredName attribute = null)
         {
             if (!ComponentTypes.ContainsKey(type))
                 throw new AutumnComponentNotFoundException(type);
             var componentTypes = ComponentTypes[type];
             
-            if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
-                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => item.Name == attribute.Name));
+            if (attribute != null)
+                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => attribute.IsName(item.Name)));
             
             if (componentTypes.Count == 1) return GetInstance(componentTypes.First());
             if (componentTypes.Count(item => item.IsPrimary) == 1)
@@ -139,7 +130,7 @@ namespace Autumn.Engine
         /// <param name="type">Type</param>
         /// <returns>IEnumerable of Instances</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
-        public IEnumerable<object> GetInstances(Type type)
+        public IEnumerable<object> GetInstances(Type type, IAutowiredName name)
         {
             if (!ComponentTypes.ContainsKey(type))
                 throw new AutumnComponentNotFoundException(type);
