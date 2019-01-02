@@ -2,6 +2,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using Autumn.Annotation;
 using Autumn.Engine;
@@ -29,6 +30,7 @@ namespace Autumn.Test
             Assert.AreEqual(context.GetInstance(typeof(TestServiceB)), serviceA.serviceB);
             Assert.AreEqual(context.GetInstance(typeof(TestServiceA)), serviceA);
             Assert.NotNull(serviceA.serviceB.node);
+            Assert.NotNull(serviceA.doc);
         }
     }
 
@@ -58,10 +60,13 @@ namespace Autumn.Test
     public class TestServiceA
     {
         public TestServiceB serviceB;
+
+        public XmlDocument doc;
         
         [Autowired]
-        public TestServiceA(TestServiceB service)
+        public TestServiceA(TestServiceB service, [Qualifier(Name = "NodeB")] XmlDocument doc)
         {
+            this.doc = doc;
             this.serviceB = service;
             Console.WriteLine($"A-Create with service {service}");
             
