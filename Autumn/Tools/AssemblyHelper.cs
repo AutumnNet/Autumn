@@ -96,11 +96,8 @@ namespace Autumn.Tools
             return new HashSet<Assembly>{Assembly.GetExecutingAssembly()}; 
         }
 
-        public static IEnumerable<Assembly> GetAssemblies(params string[] namespaces)
+        public static IEnumerable<Assembly> GetAssemblies()
         {
-            var assemblies = new HashSet<Assembly>();
-            var ns = new HashSet<string>(namespaces);
-
             var names = new List<AssemblyName>
             {
                 Assembly.GetCallingAssembly().GetName(), 
@@ -108,20 +105,7 @@ namespace Autumn.Tools
             };
             names.AddRange(Assembly.GetCallingAssembly().GetReferencedAssemblies());
             names.AddRange(Assembly.GetExecutingAssembly().GetReferencedAssemblies());
-            
-            foreach (var assemblyName in names)
-            {
-                //Console.WriteLine($"Assembly:{assemblyName.Name} [{assemblyName.FullName}]");
-                var assembly = Assembly.Load(assemblyName);
-                foreach (var type in assembly.GetTypes()) {
-                    if (ns.Contains(type.Namespace))
-                    {
-                        assemblies.Add(assembly);
-                        break;
-                    }
-                }
-            }
-            return assemblies;
+            return names.Select(Assembly.Load);
         }
 
         
@@ -174,6 +158,7 @@ namespace Autumn.Tools
             return arguments;
         }
 
+       
 
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Autumn.Annotation;
+using Autumn.Annotation.Base;
 using Autumn.Tools;
 
 namespace Autumn.Object
@@ -14,6 +16,8 @@ namespace Autumn.Object
         
         public Type BeanTargetType { get; }
         
+        public string Name { get; set; }
+        
         public MethodInfo BeanMethodInfo { get; }
         
         public ConstructorInfo Constructor { get; }
@@ -21,17 +25,21 @@ namespace Autumn.Object
         
         public bool IsBean { get; }
 
-        public bool Singleton { get; } //TODO: Get from Attr
+        public bool Singleton { get; } 
         
-        public bool Lazy { get; } //TODO: Get from Attr
+        public bool Lazy { get; } 
         
         public ComponentType(Type type)
         {
+            
             Type = type;
             InheritanceTypes = Type.GetInheritanceTypes();
             Constructor = Type.GetAutumnConstructor();
-            Singleton = true;
-            IsBean = false;
+            var attr = type.GetCustomAttribute<ComponentAttribute>();
+            Singleton = attr.Singleton;
+            IsBean = attr.Lazy;
+            Name = attr.Name;
+            
         }
 
         public ComponentType(MethodInfo beanMethod, Type target)
@@ -40,8 +48,11 @@ namespace Autumn.Object
             BeanMethodInfo = beanMethod;
             InheritanceTypes = Type.GetInheritanceTypes();
             BeanTargetType = target;
-            Singleton = true;
+            var attr = beanMethod.GetCustomAttribute<BeanAttribute>();
+            Singleton = attr.Singleton;
             IsBean = true;
+            Name = attr.Name;
+            
         }
     }
 }

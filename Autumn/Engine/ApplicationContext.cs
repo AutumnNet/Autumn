@@ -22,23 +22,7 @@ namespace Autumn.Engine
 
         private HashSet<object> WaitAutowiredInstances { get; } 
 
-        /// <summary>
-        /// Get one Instance of Type
-        /// </summary>
-        /// <param name="type">Type</param>
-        /// <returns>Single Instance</returns>
-        /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
-        /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
-        public object GetInstance(Type type)
-        {
-            if (!ComponentTypes.ContainsKey(type))
-                throw new AutumnComponentNotFoundException(type);
-            var componentTypes = ComponentTypes[type];
-            if (componentTypes.Count > 1)
-                throw new AutumnComponentMultiplyException(type, componentTypes);
-
-            return GetInstance(componentTypes.First());
-        }
+       
 
         private void Invoke(MethodInfo mi, object target)
         {
@@ -81,25 +65,53 @@ namespace Autumn.Engine
                 .ForEach(method => Invoke(method, o));
         }
 
+        /// <summary>
+        /// Get one Instance of Type
+        /// </summary>
+        /// <param name="type">Type</param>
+        /// <returns>Single Instance</returns>
+        /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
+        /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
+        public object GetInstance(Type type)
+        {
+            if (!ComponentTypes.ContainsKey(type))
+                throw new AutumnComponentNotFoundException(type);
+            var componentTypes = ComponentTypes[type];
+            if (componentTypes.Count > 1)
+                throw new AutumnComponentMultiplyException(type, componentTypes);
+            return GetInstance(componentTypes.First());
+        }
+        
         private object GetInstance(ComponentType componentType) => GetInstance(componentType, true); 
         private object GetInstance(ComponentType componentType, bool autowired)
         {
             if (!componentType.Singleton || !ComponentInstance.ContainsKey(componentType))
             {
-                var arguments = componentType.Constructor.GetAutumnConstructorArguments(this);
-                
-                //May create in recursive for Arguments
-                if (componentType.Singleton && ComponentInstance.ContainsKey(componentType)) 
-                    return ComponentInstance[componentType];
-                
-                ComponentInstance.Add(componentType, componentType.Constructor.Invoke(arguments));
-                if (autowired)
+                if (componentType.IsBean)
                 {
-                    Autowireding(ComponentInstance[componentType]);
-                    PostConstruction(ComponentInstance[componentType]);
+                    var arguments = componentType.BeanMethodInfo.GetAutumnMethodArguments(this);
+                    //May create in recursive for Arguments
+                    if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
+                        return ComponentInstance[componentType];
+                    ComponentInstance.Add(componentType, 
+                        componentType.BeanMethodInfo.Invoke(GetInstance(componentType.BeanTargetType), arguments));
                 }
                 else
-                    WaitAutowiredInstances.Add(ComponentInstance[componentType]);
+                {
+                    var arguments = componentType.Constructor.GetAutumnConstructorArguments(this);
+                    //May create in recursive for Arguments
+                    if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
+                        return ComponentInstance[componentType];
+
+                    ComponentInstance.Add(componentType, componentType.Constructor.Invoke(arguments));
+                    if (autowired)
+                    {
+                        Autowireding(ComponentInstance[componentType]);
+                        PostConstruction(ComponentInstance[componentType]);
+                    }
+                    else
+                        WaitAutowiredInstances.Add(ComponentInstance[componentType]);
+                }
             }
             return ComponentInstance[componentType];            
         }
@@ -135,7 +147,7 @@ namespace Autumn.Engine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplicationContext() : this(AssemblyHelper.GetAssembly()){}
+        public ApplicationContext() : this(new ApplicationConfiguration(Assembly.GetCallingAssembly()).ConfiguredAssemblies) {}
         /// <summary>
         /// Constructor
         /// </summary>
@@ -165,8 +177,11 @@ namespace Autumn.Engine
             {
                 if (configurationType.Singleton && !configurationType.Lazy)
                     GetInstance(configurationType, false); // Create Items
-                foreach (var bean in configurationType.GetType().GetAutumnBeans())
+                
+                Console.WriteLine("CFG {0} BEANS COUNT: {1}", configurationType.Type, configurationType.Type.GetAutumnBeans().Count());
+                foreach (var bean in configurationType.Type.GetAutumnBeans())
                 {
+                    Console.WriteLine("BEAN: {0}", bean.Name);
                     var item = new ComponentType(bean, configurationType.Type);
                     AddComponentType(item);
                     if (item.Singleton && !item.Lazy)

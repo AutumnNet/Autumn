@@ -2,6 +2,7 @@
 
 using System;
 using System.Reflection;
+using System.Xml;
 using Autumn.Annotation;
 using Autumn.Engine;
 using Autumn.Tools;
@@ -16,9 +17,9 @@ namespace Autumn.Test
         [Test]
         public void FirstTest()
         {
-            var assemblys = AssemblyHelper.GetAssemblies("Autumn", "Autumn.Test");
-            Assert.NotNull(assemblys);
-            var context = new ApplicationContext(assemblys);
+            var assemblies = AssemblyHelper.GetAssemblies();
+            Assert.NotNull(assemblies);
+            var context = new ApplicationContext();
             var serviceA = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
             Assert.NotNull(serviceA);
             Assert.NotNull(context.GetInstance(typeof(TestServiceB)));
@@ -27,15 +28,27 @@ namespace Autumn.Test
             Assert.AreEqual(serviceA, serviceA.serviceB.service);
             Assert.AreEqual(context.GetInstance(typeof(TestServiceB)), serviceA.serviceB);
             Assert.AreEqual(context.GetInstance(typeof(TestServiceA)), serviceA);
+            Assert.NotNull(serviceA.serviceB.node);
         }
     }
 
+    [Configuration]
+    [EnableAssembly(Values = new[]{"Autumn"})]
+    public class ServiceConfiguration
+    {
+        [Bean]
+        public XmlDocument getNode()
+        {
+            Console.WriteLine("Create Bean");
+            return new XmlDocument();
+        }
+    }
 
     [Service]
     public class TestServiceA
     {
         public TestServiceB serviceB;
-
+        
         [Autowired]
         public TestServiceA(TestServiceB service)
         {
@@ -51,6 +64,9 @@ namespace Autumn.Test
     {
         [Autowired]
         public TestServiceA service;
+
+        [Autowired]
+        public XmlDocument node;
 
         [Autowired] private Demo demo;
         

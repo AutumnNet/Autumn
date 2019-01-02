@@ -8,6 +8,7 @@ namespace Autumn.Annotation
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.ReturnValue)]
     public class BeanAttribute : Attribute
     {
-        public bool Singleton { get; set; }
+        public bool Singleton { get; set; } = true;
+        public string Name { get; set; }
     }
 }

@@ -41,6 +41,7 @@
     <Compile Include="Annotation\AutowiredAttribute.cs" />
     <Compile Include="Annotation\BeanAttribute.cs" />
     <Compile Include="Annotation\ConfigurationAttribute.cs" />
+    <Compile Include="Annotation\EnableAssemblyAttribute.cs" />
     <Compile Include="Annotation\PostConstruct.cs" />
     <Compile Include="Annotation\RepositoryAttribute.cs" />
     <Compile Include="Annotation\ServiceAttribute.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="Annotation\Base\Component.cs" />
     <Compile Include="Demo.cs" />
+    <Compile Include="Engine\ApplicationConfiguration.cs" />
     <Compile Include="Engine\ApplicationParameter.cs" />
     <Compile Include="Engine\ApplicationContext.cs" />
     <Compile Include="Exceptions\AutumnComponentMultiplyException.cs" />
