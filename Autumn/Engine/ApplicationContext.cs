@@ -68,18 +68,20 @@ namespace Autumn.Engine
         /// Get one Instance of Type
         /// </summary>
         /// <param name="type">Type</param>
-        /// <param name="attribute">Qualifier attribute</param>
+        /// <param name="qualifier">Qualifier attribute</param>
         /// <returns>Single Instance</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
         /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
-        public object GetInstance(Type type, IAutowiredName attribute = null)
+        public object GetInstance(Type type, IAutowiredName qualifier = null)
         {
+            if (type.IsMultiplierType()) return GetInstances(type, qualifier);
+            
             if (!ComponentTypes.ContainsKey(type))
                 throw new AutumnComponentNotFoundException(type);
             var componentTypes = ComponentTypes[type];
             
-            if (attribute != null)
-                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => attribute.IsName(item.Name)));
+            if (qualifier != null)
+                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => qualifier.IsName(item.Name)));
             
             if (componentTypes.Count == 1) return GetInstance(componentTypes.First());
             if (componentTypes.Count(item => item.IsPrimary) == 1)
@@ -123,18 +125,23 @@ namespace Autumn.Engine
             }
             return ComponentInstance[componentType];            
         }
-        
+
         /// <summary>
         /// Get List of Instances
         /// </summary>
         /// <param name="type">Type</param>
+        /// <param name="qualifier"></param>
         /// <returns>IEnumerable of Instances</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
-        public IEnumerable<object> GetInstances(Type type, IAutowiredName name)
+        public object GetInstances(Type type, IAutowiredName qualifier)
         {
-            if (!ComponentTypes.ContainsKey(type))
-                throw new AutumnComponentNotFoundException(type);
-            return ComponentTypes[type].Select(GetInstance);
+            var elementType = type.GetMultiplierElementType();
+            if (!ComponentTypes.ContainsKey(elementType))
+                throw new AutumnComponentNotFoundException(elementType);
+            var array = qualifier != null ? 
+                ComponentTypes[elementType].Where(item => qualifier.IsName(item.Name)).Select(GetInstance) : 
+                ComponentTypes[elementType].Select(GetInstance);
+            return AssemblyHelper.GetMultiplierObject(type, array);
         }
         
         /// <summary>

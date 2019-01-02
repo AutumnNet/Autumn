@@ -1,8 +1,8 @@
 
 
 using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Autumn.Annotation;
 using Autumn.Engine;
@@ -31,6 +31,14 @@ namespace Autumn.Test
             Assert.AreEqual(context.GetInstance(typeof(TestServiceA)), serviceA);
             Assert.NotNull(serviceA.serviceB.node);
             Assert.NotNull(serviceA.doc);
+            Assert.NotNull(serviceA.documents);
+            Assert.AreEqual(serviceA.documents.Count, 2);
+            Assert.NotNull(serviceA.documentsSet);
+            Assert.AreEqual(serviceA.documentsSet.Count, 2);
+            Assert.NotNull(serviceA.documentsIe);
+            Assert.AreEqual(serviceA.documentsIe.Count(), 2);
+
+            
         }
     }
 
@@ -45,7 +53,7 @@ namespace Autumn.Test
             Console.WriteLine("Create BeanA");
             return new XmlDocument();
         }
-        
+
         
         [Bean(Name = "NodeB")]
         public XmlDocument getNodeB()
@@ -62,6 +70,16 @@ namespace Autumn.Test
         public TestServiceB serviceB;
 
         public XmlDocument doc;
+        
+        [Autowired]
+        public List<XmlDocument> documents;
+
+        [Autowired]
+        public HashSet<XmlDocument> documentsSet;
+
+        //[Autowired]
+        public IEnumerable<XmlDocument> documentsIe;
+        
         
         [Autowired]
         public TestServiceA(TestServiceB service, [Qualifier(Name = "NodeB")] XmlDocument doc)

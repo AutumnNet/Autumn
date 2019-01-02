@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autumn.Annotation;
 using Autumn.Annotation.Base;
 using Autumn.Engine;
+using Autumn.Object;
 
 namespace Autumn.Tools
 {
@@ -158,6 +160,37 @@ namespace Autumn.Tools
             return arguments;
         }
 
+
+        public static bool IsIEnumerable(this Type type)
+        {
+            if (type == typeof(IEnumerable<>)) return true;
+            return type.GetInterfaces().Any(
+                i => i.IsGenericType &&
+                     i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+        }
+        
+        public static bool IsMultiplierType(this Type type)
+        {
+            return type.IsIEnumerable() ||
+                   type.IsArray;
+        }
+
+        public static Type GetMultiplierElementType(this Type type)
+        {
+            if (type.IsGenericType &&
+                (type.GetGenericTypeDefinition() == typeof(IEnumerable) ||
+                 type.GetInterfaces().Contains(typeof(IEnumerable))))
+                return type.GetGenericArguments()[0];
+            if (type.IsArray)
+                return type.GetElementType();
+            return null;
+        }
+
+
+        public static object GetMultiplierObject(Type type, IEnumerable<object> elements)
+        {
+            return new MultiplierType(type).GetValue(elements);
+        }
        
 
     }
