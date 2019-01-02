@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Autumn")]
-[assembly: AssemblyDescription("Dependency injection framework")]
+[assembly: AssemblyTitle("Autumn.Schedule")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Autumn")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyProduct("Autumn.Schedule")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3D921223-2641-44F3-9495-D51CCC26874B")]
+[assembly: Guid("484406FA-7F8C-4E9B-81F2-04F12212CB27")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.*")]
-[assembly: AssemblyFileVersion("0.1.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

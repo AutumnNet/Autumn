@@ -60,11 +60,16 @@ namespace Autumn.Engine
             o
                 .GetType()
                 .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(method => method.GetCustomAttributes(typeof(PostConstruct), true).Length > 0)
+                .Where(method => method.GetCustomAttributes(typeof(PostConstructAttribute), true).Length > 0)
                 .ToList()
                 .ForEach(method => Invoke(method, o));
         }
 
+        public void PreDestroy()
+        {
+            
+        }
+        
         /// <summary>
         /// Get one Instance of Type
         /// </summary>

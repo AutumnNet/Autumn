@@ -49,8 +49,6 @@ namespace Autumn.Object
             return ctor.Invoke(new[] { GetArray(array.ToArray()) }) as IEnumerable;
         }
         
-
-        
         private IEnumerable GetHashSet(IEnumerable<object> array)
         {
             var ctor = typeof(HashSet<>).MakeGenericType(ElementType)
