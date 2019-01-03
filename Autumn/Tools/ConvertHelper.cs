@@ -7,6 +7,7 @@ namespace Autumn.Tools
     {
         public static object To(Type type, object value)
         {
+            if (type == typeof(Type) && !(value is  Type)) return value.GetType();
             if (type == typeof(int)) return ToInt(value);
             if (type == typeof(string)) return ToString(value);
             if (type == typeof(long)) return ToLong(value);

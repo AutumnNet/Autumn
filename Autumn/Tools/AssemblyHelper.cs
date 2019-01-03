@@ -111,7 +111,7 @@ namespace Autumn.Tools
         }
 
         
-        public static object[] GetAutumnConstructorArguments(this ConstructorInfo info, ApplicationContext ctx)
+        public static object[] GetAutumnConstructorArguments(this ConstructorInfo info, AutowiredContext ctx)
         {
             if (info == null)
                 return null;
@@ -127,16 +127,17 @@ namespace Autumn.Tools
                     var value = pi.GetCustomAttribute<ValueAttribute>();
                     arguments[i] = ConvertHelper.To(
                         pi.ParameterType, 
-                        ctx.ApplicationParameter.GetOrDefault(value.Target, value.Default)
+                        ctx.GetOrDefault(value.Target, value.Default)
                     );
                 }
                 else //Autowired
-                    arguments[i] = ctx.GetInstance(pi.ParameterType, pi.GetCustomAttribute<QualifierAttribute>());
+                    arguments[i] = ctx.GetInstance(pi.ParameterType, ctx);
             }
             return arguments;
         }
 
-        public static object[] GetAutumnMethodArguments(this MethodInfo info, ApplicationContext ctx)
+
+        public static object[] GetAutumnMethodArguments(this MethodInfo info, AutowiredContext ctx)
         {
             if (info == null)
                 return null;
@@ -151,16 +152,43 @@ namespace Autumn.Tools
                     var value = pi.GetCustomAttribute<ValueAttribute>();
                     arguments[i] = ConvertHelper.To(
                         pi.ParameterType, 
-                        ctx.ApplicationParameter.GetOrDefault(value.Target, value.Default)
+                        ctx.GetOrDefault(value.Target, value.Default)
                     );
                 }
                 else //Autowired
-                    arguments[i] = ctx.GetInstance(pi.ParameterType);
+                    arguments[i] = ctx.GetInstance(pi.ParameterType, ctx);
             }
             return arguments;
         }
 
 
+        public static IEnumerable<IOption> GetOptions(this MethodInfo methodInfo)
+        {
+            return methodInfo.GetCustomAttributes(typeof(OptionAttribute)).Select(item => (IOption)item);
+        }  
+        
+        public static IEnumerable<IOption> GetOptions(this FieldInfo fieldInfo)
+        {
+            return fieldInfo.GetCustomAttributes(typeof(OptionAttribute)).Select(item => (IOption)item);
+        }  
+
+        
+        public static IEnumerable<IOption> GetOptions(this ConstructorInfo constructorInfo)
+        {
+            return constructorInfo.GetCustomAttributes(typeof(OptionAttribute)).Select(item => (IOption)item);
+        }  
+
+        public static IEnumerable<IOption> GetOptions(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.GetCustomAttributes(typeof(OptionAttribute)).Select(item => (IOption)item);
+        }
+        
+        public static IEnumerable<IOption> GetOptions(this ParameterInfo parameterInfo)
+        {
+            return parameterInfo.GetCustomAttributes(typeof(OptionAttribute)).Select(item => (IOption)item);
+        }
+
+        
         public static bool IsIEnumerable(this Type type)
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))

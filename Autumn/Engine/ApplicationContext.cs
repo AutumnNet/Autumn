@@ -27,32 +27,34 @@ namespace Autumn.Engine
 
         private void Invoke(MethodInfo mi, object target)
         {
-            mi.Invoke(target, mi.GetAutumnMethodArguments(this));
+            mi.Invoke(target, mi.GetAutumnMethodArguments( new AutowiredContext(target,this, mi.GetCustomAttribute<QualifierAttribute>(), mi)));
         }
 
         private void Autowireding(object o)
         {
             
             Console.WriteLine($"Autowireding {o.GetType().FullName}");
-            o
-                .GetType()
-                .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
-                .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
-                .ToList().ForEach(item => Console.WriteLine($" `--> {item.Name}"));
+//            o
+//                .GetType()
+//                .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
+//                .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
+//                .ToList().ForEach(item => Console.WriteLine($" `--> {item.Name}"));
             
+            //new AutowiredContext()
+
             o
                 .GetType()
                 .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType, item.GetCustomAttribute<QualifierAttribute>())));
+                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
             
             o
                 .GetType()
                 .GetProperties(BindingFlags.SetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, item.GetCustomAttribute<QualifierAttribute>())));
+                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
         }
 
         private void PostConstruction(object o)
@@ -74,47 +76,52 @@ namespace Autumn.Engine
         /// Get one Instance of Type
         /// </summary>
         /// <param name="type">Type</param>
-        /// <param name="qualifier">Qualifier attribute</param>
+        /// <param name="ctx">Autowired Contexte</param>
         /// <returns>Single Instance</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
         /// <exception cref="AutumnComponentMultiplyException">Multiplies component found</exception>
-        public object GetInstance(Type type, IAutowiredName qualifier = null)
+        //public object GetInstance(Type type, IAutowiredName qualifier = null, IEnumerable<IOption> options = null)
+        public object GetInstance(Type type, AutowiredContext ctx = null)
         {
-            if (type.IsMultiplierType()) return GetInstances(type, qualifier);
+            if (ctx == null)
+                ctx = new AutowiredContext(null, this, null);
+            
+            if (type.IsMultiplierType()) return GetInstances(type, ctx);
             
             if (!ComponentTypes.ContainsKey(type))
                 throw new AutumnComponentNotFoundException(type);
             var componentTypes = ComponentTypes[type];
             
-            if (qualifier != null)
-                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => qualifier.IsName(item.Name)));
+            if (ctx.Qualifier != null)
+                componentTypes = new HashSet<ComponentType>(componentTypes.Where(item => ctx.Qualifier.IsName(item.Name)));
             
-            if (componentTypes.Count == 1) return GetInstance(componentTypes.First());
+            if (componentTypes.Count == 1) return GetInstance(componentTypes.First(), ctx);
             if (componentTypes.Count(item => item.IsPrimary) == 1)
-                return GetInstance(componentTypes.First(item => item.IsPrimary));
+                return GetInstance(componentTypes.First(item => item.IsPrimary), ctx);
             if (componentTypes.Count(item => item.IsPrimary) > 1)
                 throw new AutumnComponentMultiplyPrimaryException(type, componentTypes);
             throw new AutumnComponentMultiplyException(type, componentTypes);
         }
 
         
-        private object GetInstance(ComponentType componentType) => GetInstance(componentType, true); 
-        private object GetInstance(ComponentType componentType, bool autowired)
+        private object GetInstance(ComponentType componentType, AutowiredContext ctx) => GetInstance(componentType, ctx, true); 
+        private object GetInstance(ComponentType componentType, AutowiredContext ctx, bool autowired)
         {
             if (!componentType.Singleton || !ComponentInstance.ContainsKey(componentType))
             {
                 if (componentType.IsBean)
                 {
-                    var arguments = componentType.BeanMethodInfo.GetAutumnMethodArguments(this);
+                    
+                    var arguments = componentType.BeanMethodInfo.GetAutumnMethodArguments(ctx);
                     //May create in recursive for Arguments
                     if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
                         return ComponentInstance[componentType];
                     ComponentInstance.Add(componentType, 
-                        componentType.BeanMethodInfo.Invoke(GetInstance(componentType.BeanTargetType), arguments));
+                        componentType.BeanMethodInfo.Invoke(GetInstance(componentType.BeanTargetType, ctx), arguments));
                 }
                 else
                 {
-                    var arguments = componentType.Constructor.GetAutumnConstructorArguments(this);
+                    var arguments = componentType.Constructor.GetAutumnConstructorArguments(ctx);
                     //May create in recursive for Arguments
                     if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
                         return ComponentInstance[componentType];
@@ -139,14 +146,14 @@ namespace Autumn.Engine
         /// <param name="qualifier"></param>
         /// <returns>IEnumerable of Instances</returns>
         /// <exception cref="AutumnComponentNotFoundException">Component not found</exception>
-        public object GetInstances(Type type, IAutowiredName qualifier)
+        public object GetInstances(Type type, AutowiredContext ctx)
         {
             var elementType = type.GetMultiplierElementType();
             if (!ComponentTypes.ContainsKey(elementType))
                 throw new AutumnComponentNotFoundException(elementType);
-            var array = qualifier != null ? 
-                ComponentTypes[elementType].Where(item => qualifier.IsName(item.Name)).Select(GetInstance) : 
-                ComponentTypes[elementType].Select(GetInstance);
+            var array = ctx.Qualifier != null ? 
+                ComponentTypes[elementType].Where(item => ctx.Qualifier.IsName(item.Name)).Select(item => GetInstance(item, ctx)) : 
+                ComponentTypes[elementType].Select(item => GetInstance(item, ctx));
             return AssemblyHelper.GetMultiplierObject(type, array);
         }
         
@@ -193,11 +200,13 @@ namespace Autumn.Engine
                         components.Add(item);
                 }
 
+            var aw = new AutowiredContext(null, this, null);
             // Instantiate Configurations
             foreach (var configurationType in configurations)
             {
+                
                 if (configurationType.Singleton && !configurationType.Lazy)
-                    GetInstance(configurationType, false); // Create Items
+                    GetInstance(configurationType, aw, false); // Create Items
                 
                 Console.WriteLine("CFG {0} BEANS COUNT: {1}", configurationType.Type, configurationType.Type.GetAutumnBeans().Count());
                 foreach (var bean in configurationType.Type.GetAutumnBeans())
@@ -206,13 +215,13 @@ namespace Autumn.Engine
                     var item = new ComponentType(bean, configurationType.Type);
                     AddComponentType(item);
                     if (item.Singleton && !item.Lazy)
-                        GetInstance(item, false); // Create Beans
+                        GetInstance(item, aw, false); // Create Beans
                 }
             }
 
             foreach (var componentType in components)
                 if (componentType.Singleton && !componentType.Lazy)
-                    GetInstance(componentType, false); // Create other Components
+                    GetInstance(componentType, aw,false); // Create other Components
 
             Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
             foreach (var instance in WaitAutowiredInstances)
