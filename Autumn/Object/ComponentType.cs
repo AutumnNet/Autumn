@@ -29,8 +29,16 @@ namespace Autumn.Object
 
         public bool Singleton { get; } 
         
-        public bool Lazy { get; } 
-        
+        public bool Lazy { get; }
+
+        public override string ToString()
+        {
+            if (IsBean)
+                return $"[ComponentType(BEAN) Target:{Type.FullName}";
+            else
+                return $"[ComponentType(COMP) Target:{Type.FullName}";
+        }
+
         public ComponentType(Type type)
         {
             Type = type;

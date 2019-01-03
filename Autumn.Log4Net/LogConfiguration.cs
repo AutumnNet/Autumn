@@ -29,12 +29,19 @@ namespace Autumn.Log4Net
             {
                 log = LogManager.GetLogger("LOGGER");
             }
+            
+            public LogWrapper(Type t)
+            {
+                log = LogManager.GetLogger(t.FullName);
+            }
+
         }
 
-        [Bean]
-        public Logging.ILog getILog()
+        [Bean(Singleton = false)]
+        [Primary]
+        public Logging.ILog getILog([Value("context.target")] object o)
         {
-            return new LogWrapper();
+            return new LogWrapper(o.GetType());
         }
     }
 }

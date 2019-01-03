@@ -100,14 +100,16 @@ namespace Autumn.Tools
 
         public static IEnumerable<Assembly> GetAssemblies()
         {
-            var names = new List<AssemblyName>
-            {
-                Assembly.GetCallingAssembly().GetName(), 
-                Assembly.GetExecutingAssembly().GetName()
-            };
-            names.AddRange(Assembly.GetCallingAssembly().GetReferencedAssemblies());
-            names.AddRange(Assembly.GetExecutingAssembly().GetReferencedAssemblies());
-            return names.Select(Assembly.Load);
+//            var names = new List<AssemblyName>
+//            {
+//                Assembly.GetCallingAssembly().GetName(), 
+//                Assembly.GetExecutingAssembly().GetName()
+//            };
+//            names.AddRange(Assembly.GetCallingAssembly().GetReferencedAssemblies());
+//            names.AddRange(Assembly.GetExecutingAssembly().GetReferencedAssemblies());
+//            return names.Select(Assembly.Load);
+
+            return AppDomain.CurrentDomain.GetAssemblies();
         }
 
         
@@ -141,15 +143,19 @@ namespace Autumn.Tools
         {
             if (info == null)
                 return null;
+            
             var arguments =  new object[info.GetParameters().Length];
             for (var i = 0; i < arguments.Length; i++)
             {
-                
+                    
                 var pi = info.GetParameters()[i];
+                
                 //Value
                 if (pi.GetCustomAttributes(typeof(ValueAttribute), false).Length > 0)
                 {
+
                     var value = pi.GetCustomAttribute<ValueAttribute>();
+                    Console.WriteLine("--> {0}", value.Target);
                     arguments[i] = ConvertHelper.To(
                         pi.ParameterType, 
                         ctx.GetOrDefault(value.Target, value.Default)

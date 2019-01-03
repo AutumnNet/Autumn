@@ -18,6 +18,8 @@ namespace Autumn.Engine
 
         private IEnumerable<string> GetConfigurationAssembly(Assembly assembly)
         {
+            
+            
             IEnumerable<string> res = assembly
                 .GetAutumnConfigurations()
                 .Where(config => config.GetCustomAttributes(typeof(EnableAssemblyAttribute), true).Length > 0)
@@ -30,6 +32,8 @@ namespace Autumn.Engine
 
         private void GetAssemblies(IEnumerable<string> newAssemblies)
         {
+            
+            
             allAssemblies
                 .Where(item => newAssemblies.Any(str => str == item.GetName().Name))
                 .ToList()

@@ -86,6 +86,8 @@ namespace Autumn.Engine
             if (ctx == null)
                 ctx = new AutowiredContext(null, this, null);
             
+            
+            
             if (type.IsMultiplierType()) return GetInstances(type, ctx);
             
             if (!ComponentTypes.ContainsKey(type))
@@ -111,9 +113,10 @@ namespace Autumn.Engine
             {
                 if (componentType.IsBean)
                 {
-                    
+                    Console.WriteLine("GetBean:{0}", componentType);
                     var arguments = componentType.BeanMethodInfo.GetAutumnMethodArguments(ctx);
                     //May create in recursive for Arguments
+                    Console.WriteLine("Arguments:{0}", arguments.Length);
                     if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
                         return ComponentInstance[componentType];
                     ComponentInstance.Add(componentType, 
@@ -188,8 +191,10 @@ namespace Autumn.Engine
             WaitAutowiredInstances = new HashSet<object>();
             var configurations = new HashSet<ComponentType>();
             var components = new HashSet<ComponentType>();
-            
-            foreach(var assembly in assemblies)
+
+            foreach (var assembly in assemblies)
+            {
+                Console.WriteLine("Get Configuration from Assembly:{0}", assembly.GetName().Name);
                 foreach (var componentType in assembly.GetAutumnComponents(true))
                 {
                     var item = new ComponentType(componentType);
@@ -199,6 +204,7 @@ namespace Autumn.Engine
                     else
                         components.Add(item);
                 }
+            }
 
             var aw = new AutowiredContext(null, this, null);
             // Instantiate Configurations
