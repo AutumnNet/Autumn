@@ -18,8 +18,8 @@ namespace Autumn.Test
         [Test]
         public void FirstTest()
         {
-            var assemblies = AssemblyHelper.GetAssemblies();
-            Assert.NotNull(assemblies);
+//            var assemblies = AssemblyHelper.GetAssemblies();
+//            Assert.NotNull(assemblies);
             var context = new ApplicationContext();
             var serviceA = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
             Assert.NotNull(serviceA);

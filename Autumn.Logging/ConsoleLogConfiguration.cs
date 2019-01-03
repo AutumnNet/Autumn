@@ -43,10 +43,9 @@ namespace Autumn.Logging
         }
 
         [Bean(Singleton = false)]
-        public ILog getILog([Value("{context.target}")] object o)
+        public ILog getILog([Value("{context.target}")] object o, [Value("{logger.subname:}")] string subname = "")
         {
-            Console.WriteLine("Get Logger!");
-            return new LogWrapper(o.GetType().FullName);
+            return new LogWrapper(string.IsNullOrEmpty(subname) ? o.GetType().FullName : subname);
         }
     }
 }

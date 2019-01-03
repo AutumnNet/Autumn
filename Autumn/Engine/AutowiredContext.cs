@@ -23,7 +23,7 @@ namespace Autumn.Engine
         {
             if (target == "context.target")
                 return Target;
-            Console.WriteLine("Key:{0} {1}",target, target==null);
+            Console.WriteLine("Key:{0} {1} {2}",target, target==null, Ctx.ApplicationParameter==null);
             return Options.ContainsKey(target) ? Options[target] : Ctx.ApplicationParameter.GetOrDefault(target, def);
         }
 

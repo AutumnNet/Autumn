@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\AutumnException.cs" />
     <Compile Include="Interfaces\IAutumnComponentInitializationProcessor.cs" />
     <Compile Include="Object\ComponentType.cs" />
+    <Compile Include="Object\EmptyApplicationParametr.cs" />
     <Compile Include="Object\MultiplierType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\AssemblyHelper.cs" />

@@ -29,7 +29,9 @@ namespace Autumn.Test
     [Service]
     public class ServiceC
     {
-        [Autowired] public ILog log;
+        [Autowired]
+        [Option("logger.subname", "testSubName")]
+        public ILog log;
 
         [PostConstruct]
         public void PostConstruct()

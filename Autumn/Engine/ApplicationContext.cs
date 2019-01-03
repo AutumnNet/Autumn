@@ -189,6 +189,7 @@ namespace Autumn.Engine
             ComponentTypes = new Dictionary<Type, HashSet<ComponentType>>();
             ComponentInstance = new Dictionary<ComponentType, object>();
             WaitAutowiredInstances = new HashSet<object>();
+            ApplicationParameter = new EmptyApplicationParametr();
             var configurations = new HashSet<ComponentType>();
             var components = new HashSet<ComponentType>();
 
