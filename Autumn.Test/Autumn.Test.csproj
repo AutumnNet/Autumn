@@ -52,10 +52,6 @@
     <Compile Include="TestDictionaryHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Autumn.Logging\Autumn.Logging.csproj">
-      <Project>{15c77de0-cc3e-4ae9-9867-e047b69e3ab7}</Project>
-      <Name>Autumn.Logging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Autumn\Autumn.csproj">
       <Project>{3d921223-2641-44f3-9495-d51ccc26874b}</Project>
       <Name>Autumn</Name>

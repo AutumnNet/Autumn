@@ -1,6 +1,5 @@
 using Autumn.Annotation;
-using Autumn.Engine;
-using Autumn.Logging;
+using Autumn.Interfaces;
 using NUnit.Framework;
 
 namespace Autumn.Test
@@ -19,7 +18,7 @@ namespace Autumn.Test
     }
 
     [Configuration]
-    [EnableAssembly(Values = new []{"Autumn.Logging"})]
+    [EnableAssembly(Values = new []{"Autumn"})]
     public class ServiceCConfiguration
     {
         
@@ -29,7 +28,7 @@ namespace Autumn.Test
     public class ServiceC
     {
         [Autowired]
-        [Option("logger.subname", "testSubName")]
+        [Option("logger.name", "Test Logger")]
         public ILog log;
 
         [PostConstruct]

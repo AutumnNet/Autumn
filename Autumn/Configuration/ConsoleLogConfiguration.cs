@@ -41,9 +41,9 @@ namespace Autumn.Configuration
         }
 
         [Bean(Singleton = false)]
-        public Interfaces.ILog getILog([Value("{context.target}")] object o, [Value("{logger.name:}")] string subname = "")
+        public Interfaces.ILog getILog([Value("{context.target}")] object o, [Value("{logger.name:}")] string name = "")
         {            
-            return new LogWrapper(string.IsNullOrEmpty(subname) ? o.GetType().FullName : subname);
+            return new LogWrapper(string.IsNullOrEmpty(name) ? o.GetType().FullName : name);
         }
     }
 }
