@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Autumn.Logging
+namespace Autumn.Interfaces
 {
     public interface ILog
     {
@@ -15,5 +15,5 @@ namespace Autumn.Logging
 
         void Error(object message); 
         void Error(object message, Exception exception);
-    }
+    }  
 }

@@ -1,28 +1,47 @@
-﻿using Autumn.Engine;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Autumn.Engine;
+using Autumn.Object;
 
 namespace Autumn
 {
     /// <summary>
     /// Autumn application
     /// </summary>
-    public class Application
+    public class Application : IDisposable
     {
-        private ApplicationContext context;
-        
-        public void Start() => Start(new string[0]);
+        public ApplicationContext Context { get; private set; }
+        private readonly Assembly startAssembly;
 
-        public void Start(string[] args) => Start(new ApplicationContext(), args);
-        
-        public void Start(ApplicationContext context, string[] args)
+        public Application(Type mainType)
         {
-            //Initialize context
-            
-            //Collect Configurations
-            //Collect Beans
-            //Collect Components
-            
-            //Construct Components
-            //Invoke PostConstruct
+           startAssembly = mainType.Assembly;
+        }
+        
+        public Application Start() => Start(new string[0]);
+
+        public Application Start(IEnumerable<string> args) => Start(new CommandLineApplicationParameter(args));
+
+        public Application Start(ApplicationParameter param) => Start(new ApplicationContext(param, startAssembly));
+        
+        public Application Start(ApplicationContext context)
+        {
+            Context = context;
+            return this;
+        }
+
+        public void Dispose()
+        {
+            Context.PreDestroy();
+            Context = null;
+        }
+
+        ~Application()
+        {
+            Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

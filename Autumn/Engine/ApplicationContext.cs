@@ -178,18 +178,25 @@ namespace Autumn.Engine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplicationContext() : this(new ApplicationConfiguration(Assembly.GetCallingAssembly()).ConfiguredAssemblies) {}
+        public ApplicationContext(ApplicationParameter parameter) : this(parameter, new ApplicationConfiguration(Assembly.GetCallingAssembly()).ConfiguredAssemblies) {}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="mainAssembly"></param>
+        public ApplicationContext(ApplicationParameter parameter, Assembly mainAssembly) : this(parameter, new ApplicationConfiguration(mainAssembly).ConfiguredAssemblies) {}
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="assembly">Assembly</param>
-        public ApplicationContext(IEnumerable<Assembly> assemblies)
+        public ApplicationContext(ApplicationParameter parameter, IEnumerable<Assembly> assemblies)
         {
             // Create Component Types
             ComponentTypes = new Dictionary<Type, HashSet<ComponentType>>();
             ComponentInstance = new Dictionary<ComponentType, object>();
             WaitAutowiredInstances = new HashSet<object>();
-            ApplicationParameter = new EmptyApplicationParametr();
+            ApplicationParameter = parameter ?? new EmptyApplicationParameter();
             var configurations = new HashSet<ComponentType>();
             var components = new HashSet<ComponentType>();
 

@@ -11,11 +11,10 @@ namespace Autumn.Test
         [Test]
         public void Test()
         {
-            var context = new ApplicationContext();
+            var context = new Application(typeof(LoggingTest)).Start().Context;
             var service = context.GetInstance(typeof(ServiceC)) as ServiceC;
             Assert.NotNull(service);
             Assert.NotNull(service.log);
-
         }
     }
 

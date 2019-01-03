@@ -2,7 +2,7 @@ using Autumn.Engine;
 
 namespace Autumn.Object
 {
-    public class EmptyApplicationParametr : ApplicationParameter
+    public class EmptyApplicationParameter : ApplicationParameter
     {
         
     }

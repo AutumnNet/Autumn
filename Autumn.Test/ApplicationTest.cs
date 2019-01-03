@@ -20,7 +20,7 @@ namespace Autumn.Test
         {
 //            var assemblies = AssemblyHelper.GetAssemblies();
 //            Assert.NotNull(assemblies);
-            var context = new ApplicationContext();
+            var context = new Application(typeof(ApplicationTest)).Start().Context;
             var serviceA = context.GetInstance(typeof(TestServiceA)) as TestServiceA;
             Assert.NotNull(serviceA);
             Assert.NotNull(context.GetInstance(typeof(TestServiceB)));

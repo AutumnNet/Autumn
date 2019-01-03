@@ -1,8 +1,7 @@
 using System;
 using Autumn.Annotation;
 
-
-namespace Autumn.Logging
+namespace Autumn.Configuration
 {
     [Configuration]
     public class ConsoleLogConfiguration
@@ -43,7 +42,7 @@ namespace Autumn.Logging
 
         [Bean(Singleton = false)]
         public Interfaces.ILog getILog([Value("{context.target}")] object o, [Value("{logger.name:}")] string subname = "")
-        {
+        {            
             return new LogWrapper(string.IsNullOrEmpty(subname) ? o.GetType().FullName : subname);
         }
     }
