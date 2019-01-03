@@ -8,7 +8,7 @@ namespace Autumn.Log4Net
     [Configuration]
     public class LogConfiguration
     {
-        public class LogWrapper : Logging.ILog
+        public class LogWrapper : Autumn.Interfaces.ILog
         {
             private readonly ILog log;
             
@@ -39,7 +39,7 @@ namespace Autumn.Log4Net
 
         [Bean(Singleton = false)]
         [Primary]
-        public Logging.ILog getILog([Value("context.target")] object o)
+        public Autumn.Interfaces.ILog getILog([Value("context.target")] object o)
         {
             return new LogWrapper(o.GetType());
         }
