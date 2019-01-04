@@ -26,7 +26,25 @@ namespace Autumn.Tools
                     (includeConfiguration || type.GetCustomAttributes(typeof(ConfigurationAttribute), false).Length == 0)
                 );
         }
-      
+
+
+        public static IEnumerable<Type> Profiled(this IEnumerable<Type> types, IEnumerable<string> profiles) {
+            return types.Where(item =>
+            {
+                var attr = item.GetCustomAttribute<ProfileAttribute>();
+                return attr == null || attr.IsName(profiles);
+            });
+        }
+
+        public static IEnumerable<MethodInfo> Profiled(this IEnumerable<MethodInfo> types,
+            IEnumerable<string> profiles) {
+            return types.Where(item =>
+            {
+                var attr = item.GetCustomAttribute<ProfileAttribute>();
+                return attr == null || attr.IsName(profiles);
+            });           
+        }
+        
         /// <summary>
         /// Return Constructor for Type
         /// </summary>

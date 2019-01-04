@@ -82,7 +82,7 @@ namespace Autumn.Test
         
         
         [Autowired]
-        public TestServiceA(TestServiceB service, [Qualifier(Name = "NodeB")] XmlDocument doc)
+        public TestServiceA(TestServiceB service, [Qualifier("NodeB")] XmlDocument doc)
         {
             this.doc = doc;
             this.serviceB = service;
@@ -99,7 +99,7 @@ namespace Autumn.Test
         public TestServiceA service;
 
         [Autowired]
-        [Qualifier(Names = new []{"NodeA", "NodeC"})]
+        [Qualifier("NodeA", "NodeC")]
         public XmlDocument node;
 
         [Autowired] private Demo demo;

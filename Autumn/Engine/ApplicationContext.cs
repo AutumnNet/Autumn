@@ -23,7 +23,18 @@ namespace Autumn.Engine
 
         private HashSet<object> WaitAutowiredInstances { get; } 
 
-        private List<IAutumnComponentInitializationProcessor> ComponentProcessor { get; } 
+        private List<IAutumnComponentInitializationProcessor> ComponentProcessor { get; }
+
+
+        private IEnumerable<string> _profiles;
+        public IEnumerable<string> Profiles
+        {
+            get
+            {
+                return _profiles ?? (_profiles = ((string) ApplicationParameter.GetOrDefault("profile", "base"))
+                           .Split(',').Select(item => item.Trim()));
+            }
+        }
 
         private void Invoke(MethodInfo mi, object target)
         {
@@ -203,7 +214,7 @@ namespace Autumn.Engine
             foreach (var assembly in assemblies)
             {
                 Console.WriteLine("Get Configuration from Assembly:{0}", assembly.GetName().Name);
-                foreach (var componentType in assembly.GetAutumnComponents(true))
+                foreach (var componentType in assembly.GetAutumnComponents(true).Profiled(Profiles))
                 {
                     var item = new ComponentType(componentType);
                     AddComponentType(item);
@@ -223,7 +234,7 @@ namespace Autumn.Engine
                     GetInstance(configurationType, aw, false); // Create Items
                 
                 Console.WriteLine("CFG {0} BEANS COUNT: {1}", configurationType.Type, configurationType.Type.GetAutumnBeans().Count());
-                foreach (var bean in configurationType.Type.GetAutumnBeans())
+                foreach (var bean in configurationType.Type.GetAutumnBeans().Profiled(Profiles))
                 {
                     Console.WriteLine("BEAN: {0}", bean.Name);
                     var item = new ComponentType(bean, configurationType.Type);
@@ -238,6 +249,7 @@ namespace Autumn.Engine
                     GetInstance(componentType, aw,false); // Create other Components
 
             Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
+            
             foreach (var instance in WaitAutowiredInstances)
                 Autowireding(instance);
             Console.WriteLine($"Autowired Done");

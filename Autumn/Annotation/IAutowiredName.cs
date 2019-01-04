@@ -2,8 +2,7 @@ namespace Autumn.Annotation
 {
     public interface IAutowiredName
     {
-        string Name { get; }
-        string[] Names { get; set; }
+        string[] Names { get; }
 
         bool IsName(string name);
     }

@@ -43,12 +43,12 @@
     <Compile Include="Annotation\ConfigurationAttribute.cs" />
     <Compile Include="Annotation\EnableAssemblyAttribute.cs" />
     <Compile Include="Annotation\IAutowiredName.cs" />
-    <Compile Include="Annotation\ComponentValueAttribute.cs" />
     <Compile Include="Annotation\IOption.cs" />
     <Compile Include="Annotation\OptionAttribute.cs" />
     <Compile Include="Annotation\PostConstructAttribute.cs" />
     <Compile Include="Annotation\PreDestroyAttribute.cs" />
     <Compile Include="Annotation\PrimaryAttribute.cs" />
+    <Compile Include="Annotation\ProfileAttribute.cs" />
     <Compile Include="Annotation\QualifierAttribute.cs" />
     <Compile Include="Annotation\RepositoryAttribute.cs" />
     <Compile Include="Annotation\ServiceAttribute.cs" />
