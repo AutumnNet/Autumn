@@ -59,7 +59,7 @@ namespace Autumn.Engine
         public void Autowire(object o)
         {
             
-            Console.WriteLine($"Autowire {o.GetType().FullName}");
+            //Console.WriteLine($"Autowire {o.GetType().FullName}");
 //          o
 //                .GetType()
 //                .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
@@ -155,10 +155,10 @@ namespace Autumn.Engine
             {
                 if (componentType.IsBean)
                 {
-                    Console.WriteLine("GetBean:{0}", componentType);
+                    //Console.WriteLine("GetBean:{0}", componentType);
                     var arguments = componentType.BeanMethodInfo.GetAutumnMethodArguments(ctx);
                     //May create in recursive for Arguments
-                    Console.WriteLine("Arguments:{0}", arguments.Length);
+                    //Console.WriteLine("Arguments:{0}", arguments.Length);
                     if (componentType.Singleton && ComponentInstance.ContainsKey(componentType))
                         return ComponentInstance[componentType];
                     ComponentInstance.Add(componentType, 
@@ -251,7 +251,7 @@ namespace Autumn.Engine
 
             foreach (var assembly in assemblies)
             {
-                Console.WriteLine("Get Configuration from Assembly:{0}", assembly.GetName().Name);
+                //Console.WriteLine("Get Configuration from Assembly:{0}", assembly.GetName().Name);
                 foreach (var componentType in assembly.GetAutumnComponents(true).Profiled(Profiles))
                 {
                     var item = new ComponentType(componentType);
@@ -271,10 +271,10 @@ namespace Autumn.Engine
                 if (configurationType.Singleton && !configurationType.Lazy)
                     GetInstance(configurationType, aw, false); // Create Items
                 
-                Console.WriteLine("CFG {0} BEANS COUNT: {1}", configurationType.Type, configurationType.Type.GetAutumnBeans().Count());
+                //Console.WriteLine("CFG {0} BEANS COUNT: {1}", configurationType.Type, configurationType.Type.GetAutumnBeans().Count());
                 foreach (var bean in configurationType.Type.GetAutumnBeans().Profiled(Profiles))
                 {
-                    Console.WriteLine("BEAN: {0}", bean.Name);
+                    //Console.WriteLine("BEAN: {0}", bean.Name);
                     var item = new ComponentType(bean, configurationType.Type);
                     AddComponentType(item);
                     if (item.Singleton && !item.Lazy)
@@ -286,16 +286,16 @@ namespace Autumn.Engine
                 if (componentType.Singleton && !componentType.Lazy)
                     GetInstance(componentType, aw,false); // Create other Components
 
-            Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
+            //Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
             
             foreach (var instance in WaitAutowiredInstances)
                 Autowire(instance);
-            Console.WriteLine($"Autowired Done");
+            //Console.WriteLine($"Autowired Done");
             
-            Console.WriteLine($"PostConstruction queue size:{WaitAutowiredInstances.Count}");
+            //Console.WriteLine($"PostConstruction queue size:{WaitAutowiredInstances.Count}");
             foreach(var instance in WaitAutowiredInstances)
                 PostConstruction(instance);
-            Console.WriteLine($"PostConstruction Done");
+            //Console.WriteLine($"PostConstruction Done");
             WaitAutowiredInstances.Clear();
         }
     }

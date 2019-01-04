@@ -173,7 +173,7 @@ namespace Autumn.Tools
                 {
 
                     var value = pi.GetCustomAttribute<ValueAttribute>();
-                    Console.WriteLine("--> {0}", value.Target);
+                    //Console.WriteLine("--> {0}", value.Target);
                     arguments[i] = ConvertHelper.To(
                         pi.ParameterType, 
                         ctx.GetOrDefault(value.Target, value.Default)

@@ -18,28 +18,28 @@ namespace Autumn.Engine
 
         private IEnumerable<string> GetConfigurationAssembly(Assembly assembly)
         {
-            Console.WriteLine("Configuring Assembly {0}", assembly.GetName().Name);
-            assembly
-                .GetAutumnConfigurations()
-                .ToList()
-                .ForEach(item =>
-                {
-                    Console.WriteLine(" `-- {0}", item.FullName);
-                    if (item.GetCustomAttribute<EnableAssemblyAttribute>() != null)
-                        item.GetCustomAttribute<EnableAssemblyAttribute>().Values
-                            .ToList()
-                            .ForEach(val =>
-                            {
-                                Console.WriteLine("    `-- {0}", val);
-                            });
-                });
+//            Console.WriteLine("Configuring Assembly {0}", assembly.GetName().Name);
+//            assembly
+//                .GetAutumnConfigurations()
+//                .ToList()
+//                .ForEach(item =>
+//                {
+//                    Console.WriteLine(" `-- {0}", item.FullName);
+//                    if (item.GetCustomAttribute<EnableAssemblyAttribute>() != null)
+//                        item.GetCustomAttribute<EnableAssemblyAttribute>().Values
+//                            .ToList()
+//                            .ForEach(val =>
+//                            {
+//                                Console.WriteLine("    `-- {0}", val);
+//                            });
+//                });
             
             IEnumerable<string> res = assembly
                 .GetAutumnConfigurations()
                 .Where(config => config.GetCustomAttributes(typeof(EnableAssemblyAttribute), true).Length > 0)
                 .SelectMany(config => config.GetCustomAttribute<EnableAssemblyAttribute>().Values);
 
-            res.ToList().ForEach(item => Console.WriteLine("NS:{0}", item));
+            //res.ToList().ForEach(item => Console.WriteLine("NS:{0}", item));
             
             return res;
         }
@@ -48,14 +48,14 @@ namespace Autumn.Engine
         {
             newAssemblies.ToList().ForEach(item =>
             {
-                Console.WriteLine("NewAssemblies:{0}", item);
+                //Console.WriteLine("NewAssemblies:{0}", item);
                 assemblies.Add(Assembly.Load(item));
             });
             
             allAssemblies
                 .Select(item =>
                 {
-                    Console.WriteLine("Get Assemblies: {0} {1}", item.GetName().Name, newAssemblies.Any(str => str == item.GetName().Name));
+                    //Console.WriteLine("Get Assemblies: {0} {1}", item.GetName().Name, newAssemblies.Any(str => str == item.GetName().Name));
                     return item;
                 })
                 .Where(item => newAssemblies.Any(str => str == item.GetName().Name))
@@ -73,11 +73,11 @@ namespace Autumn.Engine
         {
             get
             {
-                Console.WriteLine("Configured Assemblies Count:{0}", assemblies.Count);
-                assemblies.ToList().ForEach(item =>
-                    {
-                        Console.WriteLine("  `-- Configured Assemblies: {0}", item.GetName().Name);
-                    }); 
+                //Console.WriteLine("Configured Assemblies Count:{0}", assemblies.Count);
+//                assemblies.ToList().ForEach(item =>
+//                    {
+//                        Console.WriteLine("  `-- Configured Assemblies: {0}", item.GetName().Name);
+//                    }); 
                 return assemblies;
             }
         }
@@ -85,7 +85,7 @@ namespace Autumn.Engine
 
         public ApplicationConfiguration(Assembly assembly)
         {
-            Console.WriteLine("ApplicationConfiguration {0}", assembly.GetName().Name);
+            //Console.WriteLine("ApplicationConfiguration {0}", assembly.GetName().Name);
             assemblies = new HashSet<Assembly> { assembly };
             allAssemblies = AssemblyHelper.GetAssemblies();
             GetAssemblies(GetConfigurationAssembly(assembly));
