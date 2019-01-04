@@ -9,10 +9,10 @@ namespace Autumn.Engine
 {
     public class AutowiredContext
     {
-        public QualifierAttribute Qualifier { get; set; }
+        public QualifierAttribute Qualifier { get; }
         private Dictionary<string, object> Options { get; }
-        public object Target { get; set; } 
-        public ApplicationContext Ctx { get; set; }
+        public object Target { get; } 
+        public ApplicationContext Ctx { get; }
 
         public object GetInstance(Type type, AutowiredContext ctx)
         {
