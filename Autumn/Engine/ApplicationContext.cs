@@ -12,6 +12,9 @@ namespace Autumn.Engine
 {
     public class ApplicationContext
     {
+        /// <summary>
+        /// Application Paremeters
+        /// </summary>
         public ApplicationParameter ApplicationParameter { get; private set; }
         
         /// <summary>
@@ -25,8 +28,16 @@ namespace Autumn.Engine
 
         private List<IAutumnComponentInitializationProcessor> ComponentProcessor { get; }
 
+        /// <summary>
+        /// Autowired Instance
+        /// </summary>
+        public HashSet<object> AutowiredInstance { get; }
 
         private IEnumerable<string> _profiles;
+        
+        /// <summary>
+        /// Current Profiles
+        /// </summary>
         public IEnumerable<string> Profiles
         {
             get
@@ -41,11 +52,15 @@ namespace Autumn.Engine
             mi.Invoke(target, mi.GetAutumnMethodArguments( new AutowiredContext(target,this, mi.GetCustomAttribute<QualifierAttribute>(), mi)));
         }
 
-        private void Autowireding(object o)
+        /// <summary>
+        /// DI Component
+        /// </summary>
+        /// <param name="o">Object</param>
+        public void Autowire(object o)
         {
             
-            Console.WriteLine($"Autowireding {o.GetType().FullName}");
-//            o
+            Console.WriteLine($"Autowire {o.GetType().FullName}");
+//          o
 //                .GetType()
 //                .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
 //                .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
@@ -66,9 +81,14 @@ namespace Autumn.Engine
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
                 .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
+            AutowiredInstance.Add(o);
         }
 
-        private void PostConstruction(object o)
+        /// <summary>
+        /// Post Construct Object
+        /// </summary>
+        /// <param name="o">Object</param>
+        public void PostConstruction(object o)
         {
             o
                 .GetType()
@@ -78,9 +98,20 @@ namespace Autumn.Engine
                 .ForEach(method => Invoke(method, o));
         }
 
+        /// <summary>
+        /// PreDestroy Autowired component
+        /// </summary>
         public void PreDestroy()
         {
-            
+            var aw = new AutowiredContext(null, this, null);
+            AutowiredInstance.ToList().ForEach(item =>
+            {
+                item.GetType()
+                    .GetMethods()
+                    .Where(mi => mi.GetCustomAttributes(typeof(PreDestroyAttribute), true).Length > 0)
+                    .ToList()
+                    .ForEach(mi => mi.Invoke(item, mi.GetAutumnMethodArguments(aw)));
+            });
         }
         
         /// <summary>
@@ -143,7 +174,7 @@ namespace Autumn.Engine
                     ComponentInstance.Add(componentType, componentType.Constructor.Invoke(arguments));
                     if (autowired)
                     {
-                        Autowireding(ComponentInstance[componentType]);
+                        Autowire(ComponentInstance[componentType]);
                         PostConstruction(ComponentInstance[componentType]);
                     }
                     else
@@ -185,6 +216,12 @@ namespace Autumn.Engine
             }
         }
         
+        public AutowiredContext GetAutowiredContext(object o, MethodInfo item)
+        {
+            return new AutowiredContext(null, this, null);
+        }
+
+        
         /// <inheritdoc />
         /// <summary>
         /// Constructor
@@ -204,6 +241,7 @@ namespace Autumn.Engine
         public ApplicationContext(ApplicationParameter parameter, IEnumerable<Assembly> assemblies)
         {
             // Create Component Types
+            AutowiredInstance = new HashSet<object>();
             ComponentTypes = new Dictionary<Type, HashSet<ComponentType>>();
             ComponentInstance = new Dictionary<ComponentType, object>();
             WaitAutowiredInstances = new HashSet<object>();
@@ -251,14 +289,13 @@ namespace Autumn.Engine
             Console.WriteLine($"Autowired queue size:{WaitAutowiredInstances.Count}");
             
             foreach (var instance in WaitAutowiredInstances)
-                Autowireding(instance);
+                Autowire(instance);
             Console.WriteLine($"Autowired Done");
             
             Console.WriteLine($"PostConstruction queue size:{WaitAutowiredInstances.Count}");
             foreach(var instance in WaitAutowiredInstances)
                 PostConstruction(instance);
             Console.WriteLine($"PostConstruction Done");
-            
             WaitAutowiredInstances.Clear();
         }
     }

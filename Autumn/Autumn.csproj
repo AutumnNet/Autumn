@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\AutumnComponentNotFoundException.cs" />
     <Compile Include="Exceptions\AutumnException.cs" />
     <Compile Include="Interfaces\IAutumnComponentInitializationProcessor.cs" />
+    <Compile Include="Interfaces\ICommandLineRunner.cs" />
     <Compile Include="Interfaces\ILog.cs" />
     <Compile Include="Object\CommandLineApplicationParameter.cs" />
     <Compile Include="Object\ComponentType.cs" />
