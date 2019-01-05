@@ -4,13 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Autumn.Annotation;
-using Autumn.Annotation.Base;
 using Autumn.Engine;
 using Autumn.Interfaces;
 
 namespace Autumn.Schedule
 {
-    [Component]
+    [Service]
     public class SchedulledComponentProcessor : IAutumnComponentInitializationProcessor
     {
         class MethodContainer : IDisposable

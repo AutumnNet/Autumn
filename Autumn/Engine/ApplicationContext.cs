@@ -26,8 +26,11 @@ namespace Autumn.Engine
 
         private HashSet<object> WaitAutowiredInstances { get; } 
 
-        private List<IAutumnComponentInitializationProcessor> ComponentProcessor { get; }
-
+        /// <summary>
+        /// IAutumnComponentInitializationProcessor's 
+        /// </summary>
+        private List<ComponentType> ComponentProcessor { get; }
+        
         /// <summary>
         /// Autowired Instance
         /// </summary>
@@ -81,6 +84,13 @@ namespace Autumn.Engine
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
                 .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
+
+            ComponentProcessor.ForEach(itemType =>
+            {
+                var instance = GetInstance(itemType, GetAutowiredContext()) as IAutumnComponentInitializationProcessor;
+                instance?.Process(o, this);
+            });
+            
             AutowiredInstance.Add(o);
         }
 
@@ -216,7 +226,7 @@ namespace Autumn.Engine
             }
         }
         
-        public AutowiredContext GetAutowiredContext(object o, MethodInfo item)
+        public AutowiredContext GetAutowiredContext()
         {
             return new AutowiredContext(null, this, null);
         }
@@ -246,6 +256,7 @@ namespace Autumn.Engine
             ComponentInstance = new Dictionary<ComponentType, object>();
             WaitAutowiredInstances = new HashSet<object>();
             ApplicationParameter = parameter ?? new EmptyApplicationParameter();
+            ComponentProcessor = new List<ComponentType>();
             var configurations = new HashSet<ComponentType>();
             var components = new HashSet<ComponentType>();
 
@@ -256,6 +267,8 @@ namespace Autumn.Engine
                 {
                     var item = new ComponentType(componentType);
                     AddComponentType(item);
+                    if (item.Type.GetInterfaces().Contains(typeof(IAutumnComponentInitializationProcessor)))
+                        ComponentProcessor.Add(item);
                     if (componentType.IsAutumnConfiguration())
                         configurations.Add(item);
                     else
@@ -297,6 +310,7 @@ namespace Autumn.Engine
                 PostConstruction(instance);
             //Console.WriteLine($"PostConstruction Done");
             WaitAutowiredInstances.Clear();
+            
         }
     }
 }

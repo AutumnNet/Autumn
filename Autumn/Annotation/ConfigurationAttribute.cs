@@ -7,8 +7,6 @@ namespace Autumn.Annotation
     public class ConfigurationAttribute : ComponentAttribute
     {
         public int Priority { get; }
-        
-        
 
         public ConfigurationAttribute(int priority)
         {

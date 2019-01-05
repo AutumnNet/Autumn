@@ -45,5 +45,7 @@ namespace Autumn.Configuration
         {            
             return new LogWrapper(string.IsNullOrEmpty(name) ? o.GetType().FullName : name);
         }
+        
+        
     }
 }

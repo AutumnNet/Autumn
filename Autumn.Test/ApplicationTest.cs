@@ -43,7 +43,7 @@ namespace Autumn.Test
     }
 
     [Configuration]
-    [EnableAssembly(Values = new[]{"Autumn"})]
+    [EnableAssembly("Autumn")]
     public class ServiceConfiguration
     {
         [Bean(Name = "NodeA")]
