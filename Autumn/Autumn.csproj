@@ -7,8 +7,8 @@
     <ProjectGuid>{3D921223-2641-44F3-9495-D51CCC26874B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Autumn</RootNamespace>
-    <AssemblyName>Autumn</AssemblyName>
+    <RootNamespace>Autumn.Net</RootNamespace>
+    <AssemblyName>Autumn.Net</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,7 +56,6 @@
     <Compile Include="Application.cs" />
     <Compile Include="Annotation\Base\Component.cs" />
     <Compile Include="Configuration\ConsoleLogConfiguration.cs" />
-    <Compile Include="Demo.cs" />
     <Compile Include="Engine\ApplicationConfiguration.cs" />
     <Compile Include="Engine\ApplicationParameter.cs" />
     <Compile Include="Engine\ApplicationContext.cs" />
@@ -80,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Autumn.nuspec" />
+    <Content Include="licenses\license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

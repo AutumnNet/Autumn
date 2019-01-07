@@ -1,8 +1,10 @@
-using Autumn.Annotation;
-using Autumn.Interfaces;
+using Autumn.Net.Annotation;
+using Autumn.Net.Interfaces;
+using Autumn.Net.Annotation;
+using Autumn.Net.Interfaces;
 using NUnit.Framework;
 
-namespace Autumn.Test
+namespace Autumn.Net.Net.Test
 {
     [TestFixture]
     public class LoggingTest

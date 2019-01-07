@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Autumn.Engine;
+using Autumn.Net.Engine;
 
-namespace Autumn.Object
+namespace Autumn.Net.Object
 {
     public class CommandLineApplicationParameter : ApplicationParameter
     {

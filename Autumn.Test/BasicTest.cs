@@ -1,9 +1,11 @@
 using System.Reflection;
-using Autumn.Annotation;
-using Autumn.Annotation.Base;
+using Autumn.Net.Annotation;
+using Autumn.Net.Annotation.Base;
+using Autumn.Net.Annotation;
+using Autumn.Net.Annotation.Base;
 using NUnit.Framework;
 
-namespace Autumn.Test
+namespace Autumn.Net.Net.Test
 {
     [TestFixture]
     public class BasicTest

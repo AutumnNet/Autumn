@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autumn.Object;
+using Autumn.Net.Object;
 
-namespace Autumn.Exceptions
+namespace Autumn.Net.Exceptions
 {
     public class AutumnComponentMultiplyException : AutumnException
     {

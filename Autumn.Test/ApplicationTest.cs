@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using Autumn.Annotation;
-using Autumn.Engine;
-using Autumn.Tools;
+using Autumn.Net.Annotation;
+using Autumn.Net.Engine;
+using Autumn.Net.Annotation;
+using Autumn.Net.Tools;
 using NUnit.Framework;
 
-namespace Autumn.Test
+namespace Autumn.Net.Net.Test
 {
     [TestFixture]
     public class ApplicationTest

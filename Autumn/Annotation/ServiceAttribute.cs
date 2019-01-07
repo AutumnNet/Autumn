@@ -1,7 +1,7 @@
 using System;
-using Autumn.Annotation.Base;
+using Autumn.Net.Annotation.Base;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class ServiceAttribute : ComponentAttribute

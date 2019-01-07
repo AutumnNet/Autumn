@@ -1,7 +1,6 @@
 using System;
-using System.Xml;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Constructor)]
     public class AutowiredAttribute : Attribute

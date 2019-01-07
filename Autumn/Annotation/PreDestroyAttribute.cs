@@ -1,6 +1,6 @@
 using System;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class PreDestroyAttribute : Attribute 

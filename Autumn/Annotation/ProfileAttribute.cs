@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     public class ProfileAttribute : Attribute
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Autumn.Schedule
+namespace Autumn.Net.Net.Schedule
 {
     /// <summary>
     /// Scheduler

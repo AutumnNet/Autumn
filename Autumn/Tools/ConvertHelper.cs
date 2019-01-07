@@ -1,7 +1,6 @@
 using System;
-using System.CodeDom;
 
-namespace Autumn.Tools
+namespace Autumn.Net.Tools
 {
     public class ConvertHelper
     {

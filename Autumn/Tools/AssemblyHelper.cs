@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Autumn.Annotation;
-using Autumn.Annotation.Base;
-using Autumn.Engine;
-using Autumn.Object;
+using Autumn.Net.Annotation;
+using Autumn.Net.Annotation.Base;
+using Autumn.Net.Engine;
+using Autumn.Net.Object;
 
-namespace Autumn.Tools
+namespace Autumn.Net.Tools
 {
     public static class AssemblyHelper
     {

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Autumn.Net</id>
+    <version>0.1.2</version>
+    <title>Autumn.Net</title>
+    <authors>Dmitry Vysochin</authors>
+    <owners>Dmitry Vysochin</owners>
+    <license type="file">license.txt</license>
+    <projectUrl>https://github.com/AutumnNet/Autumn</projectUrl>
+    <iconUrl>https://avatars0.githubusercontent.com/u/46298405?s=128&amp;v=4</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DI Framework for .NET (Core)</description>
+    <releaseNotes>First package package.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>DI SPRING</tags>
+  </metadata>
+  <files>
+    <file src="licenses/license.txt" target="" />
+    <file src="bin\Debug\*.*" target="build" />
+  </files>
+</package>

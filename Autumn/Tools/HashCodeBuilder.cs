@@ -1,4 +1,4 @@
-namespace Autumn.Tools
+namespace Autumn.Net.Tools
 {
     public sealed class HashCodeBuilder
     {

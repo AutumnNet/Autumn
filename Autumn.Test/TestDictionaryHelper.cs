@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace Autumn.Test
+namespace Autumn.Net.Net.Test
 {
     [TestFixture]
     public class TestDictionaryHelper

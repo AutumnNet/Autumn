@@ -1,7 +1,7 @@
 using System;
-using Autumn.Annotation;
+using Autumn.Net.Annotation;
 
-namespace Autumn.Configuration
+namespace Autumn.Net.Configuration
 {
     [Configuration]
     public class ConsoleLogConfiguration

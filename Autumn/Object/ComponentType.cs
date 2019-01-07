@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Autumn.Annotation;
-using Autumn.Annotation.Base;
-using Autumn.Tools;
+using Autumn.Net.Annotation;
+using Autumn.Net.Annotation.Base;
+using Autumn.Net.Tools;
 
-namespace Autumn.Object
+namespace Autumn.Net.Object
 {
     /// <summary>
     /// Configuration Storage 

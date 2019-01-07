@@ -1,7 +1,8 @@
-using Autumn.Tools;
+using Autumn.Net.Tools;
+using Autumn.Net.Tools;
 using NUnit.Framework;
 
-namespace Autumn.Test
+namespace Autumn.Net.Net.Test
 {
     [TestFixture]
     public class AssemblyHelperTest

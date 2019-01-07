@@ -1,4 +1,4 @@
-namespace Autumn.Interfaces
+namespace Autumn.Net.Interfaces
 {
     public interface ICommandLineRunner
     {

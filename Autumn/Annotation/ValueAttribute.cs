@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     /// <summary>
     /// Value Attribute

@@ -1,4 +1,4 @@
-namespace Autumn.Exceptions
+namespace Autumn.Net.Exceptions
 {
     public class AutumnException : System.Exception
     {

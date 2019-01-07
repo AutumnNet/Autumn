@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
     public class QualifierAttribute : Attribute, IAutowiredName

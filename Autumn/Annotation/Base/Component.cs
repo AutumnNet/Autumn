@@ -1,6 +1,6 @@
 using System;
 
-namespace Autumn.Annotation.Base
+namespace Autumn.Net.Annotation.Base
 {
     /// <summary>
     /// Base Anotation

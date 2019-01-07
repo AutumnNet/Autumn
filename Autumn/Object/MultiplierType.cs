@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Autumn.Tools;
+using Autumn.Net.Tools;
 
-namespace Autumn.Object
+namespace Autumn.Net.Object
 {
     public class MultiplierType
     {

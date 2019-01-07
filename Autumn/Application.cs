@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Autumn.Annotation;
-using Autumn.Engine;
-using Autumn.Interfaces;
-using Autumn.Object;
-using Autumn.Tools;
+using Autumn.Net.Annotation;
+using Autumn.Net.Engine;
+using Autumn.Net.Interfaces;
+using Autumn.Net.Object;
+using Autumn.Net.Tools;
 
-namespace Autumn
+namespace Autumn.Net
 {
     /// <summary>
     /// Autumn application

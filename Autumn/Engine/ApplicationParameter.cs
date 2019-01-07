@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace Autumn.Engine
+namespace Autumn.Net.Engine
 {
     public abstract class ApplicationParameter : Dictionary<string, object>
     {

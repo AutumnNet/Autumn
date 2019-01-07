@@ -1,4 +1,4 @@
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     public interface IOption
     {

@@ -1,6 +1,6 @@
-using Autumn.Engine;
+using Autumn.Net.Engine;
 
-namespace Autumn.Object
+namespace Autumn.Net.Object
 {
     public class EmptyApplicationParameter : ApplicationParameter
     {

@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Autumn.Engine;
 
-namespace Autumn.Tools
+namespace Autumn.Net.Tools
 {
     public class DictionaryHelper
     {

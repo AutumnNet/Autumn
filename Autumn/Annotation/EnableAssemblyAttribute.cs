@@ -1,6 +1,6 @@
 using System;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class EnableAssemblyAttribute : Attribute

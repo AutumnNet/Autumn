@@ -1,6 +1,6 @@
 using System;
 
-namespace Autumn.Annotation
+namespace Autumn.Net.Annotation
 {
     /// <summary>
     /// Инициализатор

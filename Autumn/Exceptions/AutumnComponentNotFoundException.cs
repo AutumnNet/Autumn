@@ -1,6 +1,6 @@
 using System;
 
-namespace Autumn.Exceptions
+namespace Autumn.Net.Exceptions
 {
     public class AutumnComponentNotFoundException : AutumnException
     {
