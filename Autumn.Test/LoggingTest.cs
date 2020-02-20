@@ -20,7 +20,7 @@ namespace Autumn.Net.Net.Test
     }
 
     [Configuration]
-    [EnableAssembly("Autumn")]
+    [EnableAssembly("Autumn.Net")]
     public class ServiceCConfiguration
     {
         

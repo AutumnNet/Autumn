@@ -46,7 +46,7 @@ namespace Autumn.Net.Engine
         {
             newAssemblies.ToList().ForEach(item =>
             {
-                //Console.WriteLine("NewAssemblies:{0}", item);
+                //System.Console.WriteLine("NewAssemblies:{0}", item);
                 assemblies.Add(Assembly.Load(item));
             });
             

@@ -45,7 +45,7 @@ namespace Autumn.Net
                 var constructor = type.GetAutumnConstructor();
                 var obj = (ICommandLineRunner)constructor.Invoke(constructor.GetAutumnConstructorArguments(
                     new AutowiredContext(null, Context, constructor.GetCustomAttribute<QualifierAttribute>(),
-                        constructor)
+                        constructor, null)
                 ));
                 context.Autowire(obj);
                 context.PostConstruction(obj);

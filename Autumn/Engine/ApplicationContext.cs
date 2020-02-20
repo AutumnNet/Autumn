@@ -52,7 +52,8 @@ namespace Autumn.Net.Engine
 
         private void Invoke(MethodInfo mi, object target)
         {
-            mi.Invoke(target, mi.GetAutumnMethodArguments( new AutowiredContext(target,this, mi.GetCustomAttribute<QualifierAttribute>(), mi)));
+            var autowired = mi.GetCustomAttribute<AutowiredAttribute>(true);
+            mi.Invoke(target, mi.GetAutumnMethodArguments( new AutowiredContext(target,this, mi.GetCustomAttribute<QualifierAttribute>(), mi, autowired)));
         }
 
         /// <summary>
@@ -76,14 +77,26 @@ namespace Autumn.Net.Engine
                 .GetFields(BindingFlags.SetField | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.FieldType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
+                .ForEach(item =>
+                {
+                    var autowired = item.GetCustomAttribute<AutowiredAttribute>(true);
+                    item.SetValue(o,
+                            GetInstance(item.FieldType,
+                                new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item, autowired)));
+                });
             
             o
                 .GetType()
                 .GetProperties(BindingFlags.SetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(field => field.GetCustomAttributes(typeof(AutowiredAttribute), true).Length > 0)
                 .ToList()
-                .ForEach(item => item.SetValue(o, GetInstance(item.PropertyType, new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item))));
+                .ForEach(item =>
+                {
+                    var autowired = item.GetCustomAttribute<AutowiredAttribute>(true);
+                    item.SetValue(o,
+                            GetInstance(item.PropertyType,
+                                new AutowiredContext(o, this, item.GetCustomAttribute<QualifierAttribute>(), item, autowired)));
+                });
 
             ComponentProcessor.ForEach(itemType =>
             {
@@ -113,7 +126,7 @@ namespace Autumn.Net.Engine
         /// </summary>
         public void PreDestroy()
         {
-            var aw = new AutowiredContext(null, this, null);
+            var aw = AutowiredContext.Base(this);
             AutowiredInstance.ToList().ForEach(item =>
             {
                 item.GetType()
@@ -136,14 +149,15 @@ namespace Autumn.Net.Engine
         public object GetInstance(Type type, AutowiredContext ctx = null)
         {
             if (ctx == null)
-                ctx = new AutowiredContext(null, this, null);
-            
-            
+                ctx = AutowiredContext.Base(this);
             
             if (type.IsMultiplierType()) return GetInstances(type, ctx);
             
             if (!ComponentTypes.ContainsKey(type))
-                throw new AutumnComponentNotFoundException(type);
+                if (ctx == null || ctx.AutowiredRequired)
+                    throw new AutumnComponentNotFoundException(type);
+                else
+                    return null;
             var componentTypes = ComponentTypes[type];
             
             if (ctx.Qualifier != null)
@@ -205,7 +219,11 @@ namespace Autumn.Net.Engine
         {
             var elementType = type.GetMultiplierElementType();
             if (!ComponentTypes.ContainsKey(elementType))
-                throw new AutumnComponentNotFoundException(elementType);
+                if (ctx.AutowiredRequired)
+                    throw new AutumnComponentNotFoundException(elementType);
+                else
+                    return AssemblyHelper.GetMultiplierObject(type, new object[0]);
+            
             var array = ctx.Qualifier != null ? 
                 ComponentTypes[elementType].Where(item => ctx.Qualifier.IsName(item.Name)).Select(item => GetInstance(item, ctx)) : 
                 ComponentTypes[elementType].Select(item => GetInstance(item, ctx));
@@ -228,7 +246,7 @@ namespace Autumn.Net.Engine
         
         public AutowiredContext GetAutowiredContext()
         {
-            return new AutowiredContext(null, this, null);
+            return AutowiredContext.Base(this);
         }
 
         
@@ -276,7 +294,7 @@ namespace Autumn.Net.Engine
                 }
             }
 
-            var aw = new AutowiredContext(null, this, null);
+            var aw = AutowiredContext.Base(this);
             // Instantiate Configurations
             foreach (var configurationType in configurations)
             {

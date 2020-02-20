@@ -38,13 +38,11 @@ namespace Autumn.Net.Net.Test
             Assert.AreEqual(serviceA.documentsSet.Count, 2);
             Assert.NotNull(serviceA.documentsIe);
             Assert.AreEqual(serviceA.documentsIe.Count(), 2);
-
-            
         }
     }
 
     [Configuration]
-    [EnableAssembly("Autumn")]
+    [EnableAssembly("Autumn.Net")]
     public class ServiceConfiguration
     {
         [Bean(Name = "NodeA")]
@@ -103,7 +101,11 @@ namespace Autumn.Net.Net.Test
         [Qualifier("NodeA", "NodeC")]
         public XmlDocument node;
 
-        [Autowired] private Demo demo;
+        //[Autowired] private Demo demo;
+
+        [Autowired(Required = false)] public List<IADemo> demoEmptyCollection;
+        
+        [Autowired(Required = false)] public IADemo demoEmpty;
         
         public TestServiceB()
         {
@@ -112,4 +114,9 @@ namespace Autumn.Net.Net.Test
         
     }
 
+    public interface IADemo
+    {
+        
+    }
+    
 }
