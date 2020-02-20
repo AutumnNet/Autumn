@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autumn.Net.Annotation;
-using Autumn.Net.Annotation.Base;
 using Autumn.Net.Engine;
 using Autumn.Net.Object;
 

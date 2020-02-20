@@ -1,7 +1,5 @@
 using Autumn.Net.Annotation;
 using Autumn.Net.Interfaces;
-using Autumn.Net.Annotation;
-using Autumn.Net.Interfaces;
 using NUnit.Framework;
 
 namespace Autumn.Net.Net.Test

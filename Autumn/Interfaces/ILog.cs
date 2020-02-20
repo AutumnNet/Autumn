@@ -15,5 +15,11 @@ namespace Autumn.Net.Interfaces
 
         void Error(object message); 
         void Error(object message, Exception exception);
+        
+        
+        bool IsDebugEnable { get; }
+        bool IsInfoEnable { get; }
+        bool IsWarnEnable { get; }
+        bool IsErrorEnable { get; }
     }  
 }

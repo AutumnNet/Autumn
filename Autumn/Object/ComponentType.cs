@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Autumn.Net.Annotation;
-using Autumn.Net.Annotation.Base;
 using Autumn.Net.Tools;
 
 namespace Autumn.Net.Object

@@ -1,5 +1,4 @@
 using System;
-using Autumn.Net.Annotation.Base;
 
 namespace Autumn.Net.Annotation
 {

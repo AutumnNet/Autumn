@@ -8,7 +8,6 @@ namespace Autumn.Net.Configuration
     {
         public class LogWrapper : Interfaces.ILog
         {
-
             private readonly string target;
 
             private void Message(string level, object message)
@@ -21,18 +20,23 @@ namespace Autumn.Net.Configuration
                 Console.WriteLine($"{DateTime.Now.ToLongTimeString()} {target} [{level}] {message}\n{e.StackTrace}\n");
             }
 
-            public void Debug(object message) { Message("debug", message); }
-            public void Debug(object message, Exception exception) { Message("debug", message, exception); }
+            public void Debug(object message) { Message("DEBUG", message); }
+            public void Debug(object message, Exception exception) { Message("DEBUG", message, exception); }
             
-            public void Info(object message) { Message("info ", message); }
-            public void Info(object message, Exception exception) { Message("info ", message, exception); }
+            public void Info(object message) { Message("INFO ", message); }
+            public void Info(object message, Exception exception) { Message("INFO ", message, exception); }
             
-            public void Warn(object message) { Message("warn ", message); }
-            public void Warn(object message, Exception exception) { Message("warn ", message, exception); }
+            public void Warn(object message) { Message("WARN ", message); }
+            public void Warn(object message, Exception exception) { Message("WARN ", message, exception); }
             
-            public void Error(object message) { Message("error", message); }
-            public void Error(object message, Exception exception) { Message("error", message, exception); }
-            
+            public void Error(object message) { Message("ERROR", message); }
+            public void Error(object message, Exception exception) { Message("ERROR", message, exception); }
+
+            public bool IsDebugEnable => true;
+            public bool IsInfoEnable => true;
+            public bool IsWarnEnable => true;
+            public bool IsErrorEnable => true;
+
 
             public LogWrapper(string target)
             {
@@ -45,7 +49,5 @@ namespace Autumn.Net.Configuration
         {            
             return new LogWrapper(string.IsNullOrEmpty(name) ? o.GetType().FullName : name);
         }
-        
-        
     }
 }

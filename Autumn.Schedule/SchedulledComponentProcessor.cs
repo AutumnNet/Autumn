@@ -6,9 +6,6 @@ using System.Threading;
 using Autumn.Net.Annotation;
 using Autumn.Net.Engine;
 using Autumn.Net.Interfaces;
-using Autumn.Net.Annotation;
-using Autumn.Net.Engine;
-using Autumn.Net.Interfaces;
 
 namespace Autumn.Net.Net.Schedule
 {

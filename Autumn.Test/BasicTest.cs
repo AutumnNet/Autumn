@@ -1,8 +1,5 @@
 using System.Reflection;
 using Autumn.Net.Annotation;
-using Autumn.Net.Annotation.Base;
-using Autumn.Net.Annotation;
-using Autumn.Net.Annotation.Base;
 using NUnit.Framework;
 
 namespace Autumn.Net.Net.Test
